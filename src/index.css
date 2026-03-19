@@ -222,6 +222,7 @@ button {
 
 .bg-white { background-color: #ffffff; }
 .bg-primary { background-color: var(--primary); }
+.bg-primary-5 { background-color: rgba(37, 99, 235, 0.05); }
 .bg-primary-10 { background-color: rgba(37, 99, 235, 0.1); }
 .bg-primary-20 { background-color: rgba(37, 99, 235, 0.2); }
 .bg-secondary-20 { background-color: rgba(14, 165, 233, 0.2); }

@@ -12,21 +12,21 @@ const ProductCard = ({ product }) => {
       className="card-panel group overflow-hidden bg-white"
     >
       <div className="relative aspect-[4/5] bg-bg-alt flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-5 to-transparent"></div>
         
         {/* Visual Representation */}
         <div className="relative w-40 h-40 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-border group-hover:scale-105 transition-transform duration-500">
-           <Activity size={48} className="text-primary/10 group-hover:text-primary/30 transition-colors" />
+           <Activity size={48} className="text-primary opacity-10 group-hover:opacity-30 transition-opacity" />
            <span className="absolute bottom-4 right-4 text-[10px] font-mono text-text-muted opacity-40">BATCH: V2.1</span>
         </div>
         
         {/* Category Badge */}
-        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-primary text-[10px] uppercase font-extrabold px-3 py-1 rounded-full border border-primary/10 shadow-sm">
+        <div className="absolute top-4 left-4 bg-white opacity-90 backdrop-blur-sm text-primary text-[10px] uppercase font-extrabold px-3 py-1 rounded-full border border-primary-10 shadow-sm">
           {product.category}
         </div>
         
         {/* Quick Add (Professional Style) */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-400 bg-white/95 backdrop-blur-md border-t border-border">
+        <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-400 bg-white opacity-95 backdrop-blur-md border-t border-border">
            <button className="w-full btn-primary py-2.5 rounded-lg text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2">
              <ShoppingCart size={14} /> Quick Add
            </button>
