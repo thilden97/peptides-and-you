@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <div className="relative min-h-[85vh] flex items-center pt-24 pb-12 overflow-hidden bg-bg-alt">
       {/* Background Decor */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[100px] rounded-full -mr-32 -mt-32"></div>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-105 blur-[100px] rounded-full -mr-32 -mt-32"></div>
       
       <div className="container relative z-10 w-full">
         <div className="max-w-4xl mx-auto flex flex-col items-center text-center">

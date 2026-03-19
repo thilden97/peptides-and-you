@@ -26,7 +26,7 @@ const Navbar = () => {
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-sm py-2' : 'bg-white/80 backdrop-blur-md py-4'}`}>
       <div className="container flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="p-1.5 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-all">
+          <div className="p-1.5 bg-primary-10 rounded-lg group-hover:bg-primary-20 transition-all">
             <Droplets className="text-primary" size={20} />
           </div>
           <span className="text-lg font-extrabold tracking-tight outfit-font">

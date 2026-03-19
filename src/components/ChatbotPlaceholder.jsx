@@ -11,14 +11,14 @@ const ChatbotPlaceholder = () => {
   const toggleChat = () => setIsOpen(!isOpen);
 
   return (
-    <div className="fixed bottom-8 right-8 z-[100]">
+    <div className="fixed bottom-8 right-8 z-100">
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="bg-white w-[350px] sm:w-[400px] h-[550px] mb-4 flex flex-col overflow-hidden shadow-2xl rounded-2xl border border-border"
+            className="bg-white w-350 sm:w-400 h-[550px] mb-4 flex flex-col overflow-hidden shadow-2xl rounded-2xl border border-border"
           >
             {/* Header */}
             <div className="bg-primary p-6 flex justify-between items-center text-white">
