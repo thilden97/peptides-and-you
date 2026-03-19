@@ -61,7 +61,7 @@ const ProductDetails = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-10 border-primary-10 text-[10px] uppercase font-extrabold tracking-widest rounded-full mb-8 border border-primary/10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-10 border-primary-10 text-[10px] uppercase font-extrabold tracking-widest rounded-full mb-8 border">
               {product.category}
             </div>
             
@@ -95,7 +95,7 @@ const ProductDetails = () => {
               <button className="flex-1 btn-primary py-5 flex items-center justify-center gap-3 text-lg">
                 <ShoppingCart size={22} /> Add to Procurement
               </button>
-              <button className="px-8 btn-secondary py-5 flex items-center justify-center gap-3 text-lg border-primary/20 text-primary hover:bg-primary-5">
+              <button className="px-8 btn-secondary py-5 flex items-center justify-center gap-3 text-lg border-primary-20 text-primary hover:bg-primary-5">
                 <FileText size={22} /> SDS / COA Data
               </button>
             </div>
@@ -121,7 +121,7 @@ const ProductDetails = () => {
         <section className="mt-32 pt-24 border-t border-border">
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
               <div className="lg:col-span-1">
-                 <div className="p-4 bg-primary/10 rounded-2xl inline-block mb-6">
+                 <div className="p-4 bg-primary-10 rounded-2xl inline-block mb-6">
                     <Database size={32} className="text-primary" />
                  </div>
                  <h2 className="text-3xl font-extrabold tracking-tight mb-4">Scientific Analysis</h2>
