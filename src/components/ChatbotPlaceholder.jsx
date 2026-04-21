@@ -88,7 +88,7 @@ const ChatbotPlaceholder = () => {
             {/* Header */}
             <div style={{
               background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)', padding: '16px 18px',
-              display: 'flex', justify-content: 'space-between', alignItems: 'center', color: '#fff',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff',
             }}>
               <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
                 <div style={{background: 'rgba(255,255,255,0.2)', padding: 7, borderRadius: 8}}>
