@@ -7,14 +7,21 @@ const Stars = ({ rating = 5 }) => (
   <div className="stars">
     {[...Array(5)].map((_, i) => (
       <Star key={i} size={13}
-        fill={i < rating ? '#D4AF37' : 'transparent'}
-        color={i < rating ? '#D4AF37' : '#D4D4D8'}
+        fill={i < rating ? '#1F6FB2' : 'transparent'}
+        color={i < rating ? '#1F6FB2' : '#D4D4D8'}
         strokeWidth={1.5} />
     ))}
   </div>
 );
 
+const formatPrice = (price) => {
+  return `₱${price.toLocaleString()}`;
+};
+
 const ProductCard = ({ product }) => {
+  const firstVariant = product.variants[0];
+  const hasMultipleVariants = product.variants.length > 1;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -24,9 +31,22 @@ const ProductCard = ({ product }) => {
     >
       <div className="product-card-image">
         {product.type === 'stack' && <div className="badge-top">Stack</div>}
-        <img src="/peptide-vial.png" alt={`${product.name} peptide vial`} style={{
+        {/* Branded vial image with logo overlay */}
+        <img src="/peptide-vial-branded.png" alt={`${product.name} peptide vial — Peptides & You`} style={{
           width: '100%', height: '100%', objectFit: 'cover',
         }} />
+        {/* Small logo watermark */}
+        <img
+          src="/logo.png"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: 'absolute', bottom: 8, right: 8,
+            height: 24, width: 'auto', objectFit: 'contain',
+            opacity: 0.7, filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))',
+            pointerEvents: 'none',
+          }}
+        />
       </div>
 
       <div className="product-card-body">
@@ -34,7 +54,7 @@ const ProductCard = ({ product }) => {
           <Link to={`/product/${product.id}`} style={{textDecoration: 'none'}}>
             <h3 className="card-title">{product.name}</h3>
           </Link>
-          {product.size && <span className="card-size">{product.size}</span>}
+          {firstVariant && <span className="card-size">{firstVariant.size}</span>}
         </div>
 
         <span style={{
@@ -54,14 +74,15 @@ const ProductCard = ({ product }) => {
         }}>{product.shortDescription}</p>
 
         <div className="card-price">
-          {product.originalPrice && (
-            <span className="old-price">£{product.originalPrice.toFixed(2)}</span>
+          {hasMultipleVariants ? (
+            <span>From {formatPrice(firstVariant.price)}</span>
+          ) : (
+            <span>{formatPrice(firstVariant.price)}</span>
           )}
-          £{product.price.toFixed(2)}
         </div>
 
         <Link to={`/product/${product.id}`} className="card-btn">
-          Add to basket
+          View Details
         </Link>
       </div>
     </motion.div>

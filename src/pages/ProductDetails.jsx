@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { peptides } from '../data/peptides';
 import { Helmet } from 'react-helmet-async';
@@ -9,18 +9,21 @@ const Stars = ({ rating = 5 }) => (
   <div className="stars" style={{marginBottom: 6}}>
     {[...Array(5)].map((_, i) => (
       <Star key={i} size={15}
-        fill={i < rating ? '#D4AF37' : 'transparent'}
-        color={i < rating ? '#D4AF37' : '#D4D4D8'}
+        fill={i < rating ? '#1F6FB2' : 'transparent'}
+        color={i < rating ? '#1F6FB2' : '#D4D4D8'}
         strokeWidth={1.5} />
     ))}
   </div>
 );
 
+const formatPrice = (price) => `₱${price.toLocaleString()}`;
+
 const ProductDetails = () => {
   const { id } = useParams();
   const product = peptides.find(p => p.id === id);
+  const [selectedVariant, setSelectedVariant] = useState(0);
 
-  useEffect(() => { window.scrollTo(0, 0); }, [id]);
+  useEffect(() => { window.scrollTo(0, 0); setSelectedVariant(0); }, [id]);
 
   if (!product) return (
     <div style={{paddingTop: 240, textAlign: 'center', fontSize: 20, fontWeight: 700, color: 'var(--text-secondary)', minHeight: '60vh'}}>
@@ -28,28 +31,71 @@ const ProductDetails = () => {
     </div>
   );
 
+  const currentVariant = product.variants[selectedVariant];
+
   // Product JSON-LD
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
     "description": product.description,
+    "image": "https://peptidesandyou.com/peptide-vial-branded.png",
     "sku": product.id,
     "brand": { "@type": "Brand", "name": "Peptides and You" },
-    "offers": {
+    "url": `https://peptidesandyou.com/product/${product.id}`,
+    "offers": product.variants.map(v => ({
       "@type": "Offer",
-      "priceCurrency": "GBP",
-      "price": product.price.toFixed(2),
+      "priceCurrency": "PHP",
+      "price": v.price,
       "availability": "https://schema.org/InStock",
       "url": `https://peptidesandyou.com/product/${product.id}`,
       "seller": { "@type": "Organization", "name": "Peptides and You" },
-    },
+    })),
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": product.rating,
       "reviewCount": 47,
       "bestRating": 5
     }
+  };
+
+  // BreadcrumbList JSON-LD
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://peptidesandyou.com" },
+      { "@type": "ListItem", "position": 2, "name": "Shop", "item": "https://peptidesandyou.com/shop" },
+      { "@type": "ListItem", "position": 3, "name": product.name, "item": `https://peptidesandyou.com/product/${product.id}` },
+    ]
+  };
+
+  // FAQ JSON-LD per product
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": `What is ${product.name}?`,
+        "acceptedAnswer": { "@type": "Answer", "text": product.description }
+      },
+      {
+        "@type": "Question",
+        "name": `What are the benefits of ${product.name}?`,
+        "acceptedAnswer": { "@type": "Answer", "text": product.benefits.join('. ') + '.' }
+      },
+      {
+        "@type": "Question",
+        "name": `How much does ${product.name} cost?`,
+        "acceptedAnswer": { "@type": "Answer", "text": `${product.name} is available in ${product.variants.length} size${product.variants.length > 1 ? 's' : ''}: ${product.variants.map(v => `${v.size} at ₱${v.price.toLocaleString()}`).join(', ')}.` }
+      },
+      {
+        "@type": "Question",
+        "name": `Is ${product.name} lab tested?`,
+        "acceptedAnswer": { "@type": "Answer", "text": `Yes. All Peptides & You products, including ${product.name}, are third-party lab tested and supplied with a Certificate of Analysis (COA) to verify identity and purity.` }
+      }
+    ]
   };
 
   return (
@@ -63,11 +109,14 @@ const ProductDetails = () => {
         <meta property="og:description" content={product.shortDescription} />
         <meta property="og:type" content="product" />
         <meta property="og:url" content={`https://peptidesandyou.com/product/${product.id}`} />
-        <meta property="product:price:amount" content={product.price.toFixed(2)} />
-        <meta property="product:price:currency" content="GBP" />
+        <meta property="og:image" content="https://peptidesandyou.com/peptide-vial-branded.png" />
+        <meta property="product:price:amount" content={currentVariant.price} />
+        <meta property="product:price:currency" content="PHP" />
         <meta name="geo.region" content="PH-00" />
         <meta name="geo.placename" content="Manila" />
         <script type="application/ld+json">{JSON.stringify(productSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="container">
@@ -79,7 +128,7 @@ const ProductDetails = () => {
         </Link>
 
         <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'flex-start'}}>
-          {/* Image */}
+          {/* Image — branded vial with logo */}
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{position: 'sticky', top: 200}}>
             <div style={{
               background: '#fff', aspectRatio: '1', borderRadius: 16,
@@ -87,18 +136,30 @@ const ProductDetails = () => {
               border: '1px solid var(--border)', position: 'relative',
               overflow: 'hidden',
             }}>
-              <img src="/peptide-vial.png" alt={`${product.name} peptide vial`} style={{
+              <img src="/peptide-vial-branded.png" alt={`${product.name} peptide vial — Peptides & You`} style={{
                 width: '70%', height: '70%', objectFit: 'contain',
               }} />
 
-              {product.size && (
+              {/* Logo overlay */}
+              <img
+                src="/logo.png"
+                alt=""
+                aria-hidden="true"
+                style={{
+                  position: 'absolute', top: 16, left: 16,
+                  height: 36, width: 'auto', objectFit: 'contain',
+                  opacity: 0.8,
+                }}
+              />
+
+              {currentVariant && (
                 <div style={{
                   position: 'absolute', top: 16, right: 16,
                   background: 'var(--primary-light)', padding: '5px 12px', borderRadius: 6,
                   fontSize: 12, fontWeight: 700, color: 'var(--primary)',
-                  border: '1px solid rgba(184,151,47,0.15)',
+                  border: '1px solid rgba(31,111,178,0.15)',
                 }}>
-                  {product.size}
+                  {currentVariant.size}
                 </div>
               )}
 
@@ -124,27 +185,47 @@ const ProductDetails = () => {
             {/* Category */}
             <span style={{
               display: 'inline-block', padding: '4px 12px', borderRadius: 6,
-              background: 'var(--primary-light)', border: '1px solid rgba(184,151,47,0.15)',
+              background: 'var(--primary-light)', border: '1px solid rgba(31,111,178,0.15)',
               fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
               color: 'var(--primary)', marginBottom: 12,
             }}>
               {product.category}
             </span>
 
-            <h1 className="outfit" style={{fontSize: 40, fontWeight: 800, color: 'var(--text)', marginBottom: 10, letterSpacing: '-0.02em'}}>
+            <h1 className="montserrat" style={{fontSize: 40, fontWeight: 700, color: 'var(--text)', marginBottom: 10, letterSpacing: '0.01em'}}>
               {product.name}
             </h1>
 
             <Stars rating={product.rating} />
 
-            <div style={{display: 'flex', alignItems: 'center', gap: 16, margin: '12px 0 24px'}}>
-              <p className="outfit" style={{fontSize: 28, fontWeight: 800, color: 'var(--primary)'}}>
-                {product.originalPrice && (
-                  <span style={{fontSize: 18, color: 'var(--text-light)', textDecoration: 'line-through', marginRight: 10, fontWeight: 500}}>
-                    £{product.originalPrice.toFixed(2)}
-                  </span>
-                )}
-                £{product.price.toFixed(2)}
+            {/* Variant Selector */}
+            {product.variants.length > 1 && (
+              <div style={{margin: '16px 0 8px'}}>
+                <p style={{fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8}}>
+                  Select Size
+                </p>
+                <div style={{display: 'flex', gap: 8, flexWrap: 'wrap'}}>
+                  {product.variants.map((v, i) => (
+                    <button key={i}
+                      onClick={() => setSelectedVariant(i)}
+                      style={{
+                        padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                        cursor: 'pointer', transition: 'all 0.2s',
+                        background: selectedVariant === i ? 'var(--primary)' : '#fff',
+                        color: selectedVariant === i ? '#fff' : 'var(--text)',
+                        border: selectedVariant === i ? '2px solid var(--primary)' : '2px solid var(--border)',
+                      }}
+                    >
+                      {v.size} — {formatPrice(v.price)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div style={{display: 'flex', alignItems: 'center', gap: 16, margin: '16px 0 24px'}}>
+              <p className="montserrat" style={{fontSize: 28, fontWeight: 700, color: 'var(--primary)'}}>
+                {formatPrice(currentVariant.price)}
               </p>
               <div style={{height: 28, width: 1, background: 'var(--border)'}} />
               <p style={{display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: '#16A34A'}}>
@@ -158,11 +239,11 @@ const ProductDetails = () => {
 
             {/* Benefits */}
             <div style={{background: '#fff', padding: 24, borderRadius: 12, border: '1px solid var(--border)', marginBottom: 24}}>
-              <h3 className="outfit" style={{fontSize: 15, fontWeight: 700, marginBottom: 14, color: 'var(--text)'}}>Key Benefits</h3>
+              <h3 className="montserrat" style={{fontSize: 15, fontWeight: 700, marginBottom: 14, color: 'var(--text)'}}>Key Benefits</h3>
               <ul style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, listStyle: 'none', padding: 0}}>
                 {product.benefits.map((benefit, i) => (
                   <li key={i} style={{display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)'}}>
-                    <CheckCircle2 size={15} color="var(--primary)" style={{marginTop: 2, flexShrink: 0}} />
+                    <CheckCircle2 size={15} color="var(--accent)" style={{marginTop: 2, flexShrink: 0}} />
                     {benefit}
                   </li>
                 ))}
@@ -172,7 +253,7 @@ const ProductDetails = () => {
             {/* CTAs */}
             <div style={{display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 360, marginBottom: 28}}>
               <button className="btn-primary" style={{padding: '14px 28px', fontSize: 15, width: '100%'}}>
-                <ShoppingCart size={18} /> Add to Basket
+                <ShoppingCart size={18} /> Inquire Now
               </button>
               <button className="btn-outline" style={{padding: '12px 28px', fontSize: 14, width: '100%'}}>
                 <FileText size={18} /> Download COA
@@ -193,7 +274,7 @@ const ProductDetails = () => {
                   <span style={{display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 4}}>
                     {spec.label}
                   </span>
-                  <span className="outfit" style={{fontSize: 17, fontWeight: 800, color: 'var(--text)'}}>{spec.value}</span>
+                  <span className="montserrat" style={{fontSize: 17, fontWeight: 700, color: 'var(--text)'}}>{spec.value}</span>
                 </div>
               ))}
             </div>
@@ -210,7 +291,7 @@ const ProductDetails = () => {
               }}>
                 <Database size={22} color="var(--primary)" />
               </div>
-              <h2 className="outfit" style={{fontSize: 22, fontWeight: 800, marginBottom: 8, color: 'var(--text)'}}>About This Peptide</h2>
+              <h2 className="montserrat" style={{fontSize: 22, fontWeight: 700, marginBottom: 8, color: 'var(--text)'}}>About This Peptide</h2>
               <p style={{fontSize: 13, color: 'var(--text-muted)', fontWeight: 500}}>
                 Detailed information about <strong style={{color: 'var(--text-secondary)'}}>{product.name}</strong>.
               </p>

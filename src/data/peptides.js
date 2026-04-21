@@ -13,10 +13,15 @@ export const peptides = [
     ],
     category: 'Healing & Recovery',
     type: 'peptide',
-    size: '5MG',
+    variants: [
+      { size: '5mg', price: 1800 },
+      { size: '10mg', price: 3200 },
+    ],
     rating: 5,
-    price: 49.99,
-    seoKeywords: ['BPC-157', 'tissue repair peptide', 'gut healing peptide', 'recovery compound']
+    seoKeywords: ['BPC-157', 'tissue repair peptide', 'gut healing peptide', 'recovery compound'],
+    quizTags: ['recovery', 'healing', 'gut-health', 'joint-pain', 'inflammation', 'beginner-friendly'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'tb-500',
@@ -32,30 +37,15 @@ export const peptides = [
     ],
     category: 'Healing & Recovery',
     type: 'peptide',
-    size: '5MG',
-    rating: 5,
-    price: 54.99,
-    seoKeywords: ['TB-500', 'Thymosin Beta-4', 'systemic recovery', 'scar tissue reduction']
-  },
-  {
-    id: 'wolverine-stack',
-    name: 'Wolverine Stack',
-    shortDescription: 'BPC-157 + TB-500 in a single vial — local and systemic repair working simultaneously.',
-    description: 'Named for a reason. The Wolverine Stack combines BPC-157 and TB-500 in a single vial — local and systemic tissue repair working simultaneously. BPC-157 attacks the injury site directly; TB-500 mobilises the repair response body-wide. Together they cut recovery timelines in half. This is the stack athletes, weekend warriors, and post-surgical patients reach for first — and the one that consistently outperforms everything else in the recovery category.',
-    benefits: [
-      'Combines local and systemic healing in one vial',
-      'Cuts recovery timelines in half',
-      'BPC-157 targets the injury site directly',
-      'TB-500 mobilises body-wide repair response',
-      'The #1 stack in the recovery category'
+    variants: [
+      { size: '2mg', price: 1500 },
+      { size: '5mg', price: 2000 },
     ],
-    category: 'Recovery Stack',
-    type: 'stack',
-    size: 'Combo',
     rating: 5,
-    price: 94.99,
-    originalPrice: 104.98,
-    seoKeywords: ['Wolverine Stack', 'BPC-157 TB-500 combo', 'ultimate recovery stack', 'peptide stack']
+    seoKeywords: ['TB-500', 'Thymosin Beta-4', 'systemic recovery', 'scar tissue reduction'],
+    quizTags: ['recovery', 'healing', 'scar-tissue', 'flexibility', 'post-surgery', 'beginner-friendly'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'ghk-cu',
@@ -71,10 +61,15 @@ export const peptides = [
     ],
     category: 'Anti-Aging & Skin',
     type: 'peptide',
-    size: '100MG',
+    variants: [
+      { size: '50mg', price: 2000 },
+      { size: '100mg', price: 3000 },
+    ],
     rating: 5,
-    price: 44.99,
-    seoKeywords: ['GHK-Cu', 'copper peptide', 'anti-aging skin peptide', 'hair restoration peptide']
+    seoKeywords: ['GHK-Cu', 'copper peptide', 'anti-aging skin peptide', 'hair restoration peptide'],
+    quizTags: ['anti-aging', 'skin', 'hair', 'collagen', 'wrinkles', 'beginner-friendly'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'retatrutide',
@@ -90,10 +85,40 @@ export const peptides = [
     ],
     category: 'Weight Management',
     type: 'peptide',
-    size: '5MG',
+    variants: [
+      { size: '5mg', price: 3500 },
+      { size: '10mg', price: 4500 },
+      { size: '15mg', price: 6500 },
+    ],
     rating: 5,
-    price: 129.99,
-    seoKeywords: ['Retatrutide', 'weight loss peptide', 'triple agonist', 'GLP-1 GIP glucagon']
+    seoKeywords: ['Retatrutide', 'weight loss peptide', 'triple agonist', 'GLP-1 GIP glucagon'],
+    quizTags: ['weight-loss', 'fat-burning', 'appetite', 'metabolic', 'advanced'],
+    paymentReady: true,
+    stripeProductId: '',
+  },
+  {
+    id: 'wolverine-stack',
+    name: 'Wolverine Stack',
+    shortDescription: 'BPC-157 + TB-500 in a single vial — local and systemic repair working simultaneously.',
+    description: 'Named for a reason. The Wolverine Stack combines BPC-157 and TB-500 in a single vial — local and systemic tissue repair working simultaneously. BPC-157 attacks the injury site directly; TB-500 mobilises the repair response body-wide. Together they cut recovery timelines in half. This is the stack athletes, weekend warriors, and post-surgical patients reach for first — and the one that consistently outperforms everything else in the recovery category.',
+    benefits: [
+      'Combines local and systemic healing in one vial',
+      'Cuts recovery timelines in half',
+      'BPC-157 targets the injury site directly',
+      'TB-500 mobilises body-wide repair response',
+      'The #1 stack in the recovery category'
+    ],
+    category: 'Recovery Stack',
+    type: 'stack',
+    variants: [
+      { size: '10mg', price: 3000 },
+      { size: '20mg', price: 5000 },
+    ],
+    rating: 5,
+    seoKeywords: ['Wolverine Stack', 'BPC-157 TB-500 combo', 'ultimate recovery stack', 'peptide stack'],
+    quizTags: ['recovery', 'healing', 'stack', 'injury', 'post-surgery', 'intermediate'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'epithalon',
@@ -109,10 +134,14 @@ export const peptides = [
     ],
     category: 'Longevity & Anti-Aging',
     type: 'peptide',
-    size: '10MG',
+    variants: [
+      { size: '10mg', price: 1850 },
+    ],
     rating: 5,
-    price: 59.99,
-    seoKeywords: ['Epithalon', 'telomere peptide', 'longevity peptide', 'anti-aging telomerase']
+    seoKeywords: ['Epithalon', 'telomere peptide', 'longevity peptide', 'anti-aging telomerase'],
+    quizTags: ['longevity', 'anti-aging', 'sleep', 'immune', 'telomeres', 'intermediate'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'aod-9604',
@@ -128,10 +157,14 @@ export const peptides = [
     ],
     category: 'Fat Loss & Metabolic',
     type: 'peptide',
-    size: '5MG',
+    variants: [
+      { size: '5mg', price: 2000 },
+    ],
     rating: 5,
-    price: 64.99,
-    seoKeywords: ['AOD-9604', 'fat loss peptide', 'growth hormone fragment', 'body composition']
+    seoKeywords: ['AOD-9604', 'fat loss peptide', 'growth hormone fragment', 'body composition'],
+    quizTags: ['weight-loss', 'fat-burning', 'body-composition', 'metabolic', 'beginner-friendly'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'semax',
@@ -147,10 +180,14 @@ export const peptides = [
     ],
     category: 'Cognitive & Neuro',
     type: 'peptide',
-    size: '5MG',
+    variants: [
+      { size: '2mg', price: 1750 },
+    ],
     rating: 5,
-    price: 49.99,
-    seoKeywords: ['Semax', 'nootropic peptide', 'BDNF booster', 'cognitive enhancement']
+    seoKeywords: ['Semax', 'nootropic peptide', 'BDNF booster', 'cognitive enhancement'],
+    quizTags: ['cognitive', 'focus', 'memory', 'brain', 'nootropic', 'intermediate'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'selank',
@@ -166,10 +203,14 @@ export const peptides = [
     ],
     category: 'Cognitive & Mood',
     type: 'peptide',
-    size: '5MG',
+    variants: [
+      { size: '5mg', price: 1600 },
+    ],
     rating: 5,
-    price: 49.99,
-    seoKeywords: ['Selank', 'anxiety peptide', 'mood stabiliser', 'GABA serotonin peptide']
+    seoKeywords: ['Selank', 'anxiety peptide', 'mood stabiliser', 'GABA serotonin peptide'],
+    quizTags: ['cognitive', 'mood', 'anxiety', 'stress', 'calm', 'beginner-friendly'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'cjc-1295',
@@ -185,10 +226,16 @@ export const peptides = [
     ],
     category: 'Growth Hormone',
     type: 'peptide',
-    size: '5MG',
+    variants: [
+      { size: '2mg w/DAC', price: 2000 },
+      { size: '5mg w/DAC', price: 2500 },
+      { size: '2mg no DAC', price: 1800 },
+    ],
     rating: 5,
-    price: 59.99,
-    seoKeywords: ['CJC-1295', 'GHRH analogue', 'growth hormone release', 'anti-aging GH']
+    seoKeywords: ['CJC-1295', 'GHRH analogue', 'growth hormone release', 'anti-aging GH'],
+    quizTags: ['growth-hormone', 'performance', 'body-composition', 'sleep', 'recovery', 'intermediate'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'ipamorelin',
@@ -204,10 +251,15 @@ export const peptides = [
     ],
     category: 'Growth Hormone',
     type: 'peptide',
-    size: '5MG',
+    variants: [
+      { size: '2mg', price: 1600 },
+      { size: '5mg', price: 2000 },
+    ],
     rating: 5,
-    price: 54.99,
-    seoKeywords: ['Ipamorelin', 'growth hormone secretagogue', 'clean GH release', 'CJC-1295 stack']
+    seoKeywords: ['Ipamorelin', 'growth hormone secretagogue', 'clean GH release', 'CJC-1295 stack'],
+    quizTags: ['growth-hormone', 'performance', 'muscle', 'sleep', 'fat-burning', 'beginner-friendly'],
+    paymentReady: true,
+    stripeProductId: '',
   },
   {
     id: 'hgh',
@@ -223,9 +275,16 @@ export const peptides = [
     ],
     category: 'Hormonal & Performance',
     type: 'peptide',
-    size: '10IU',
+    variants: [
+      { size: '10iu/vial', price: 1470 },
+      { size: '15iu/vial', price: 1900 },
+      { size: '20iu/vial', price: 2400 },
+      { size: '1 Box (10×10iu)', price: 12000 },
+    ],
     rating: 5,
-    price: 199.99,
-    seoKeywords: ['HGH', 'recombinant growth hormone', 'rHGH', 'pharmaceutical grade HGH']
+    seoKeywords: ['HGH', 'recombinant growth hormone', 'rHGH', 'pharmaceutical grade HGH'],
+    quizTags: ['growth-hormone', 'performance', 'muscle', 'fat-burning', 'recovery', 'advanced'],
+    paymentReady: true,
+    stripeProductId: '',
   }
 ];

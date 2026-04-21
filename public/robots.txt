@@ -1,6 +1,61 @@
+# Peptides and You — robots.txt
+# https://peptidesandyou.com
+
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
+Disallow: /checkout/
+Disallow: /cart/
 
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+# AI Crawlers — Welcome
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Social Media Crawlers
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Sitemaps & AI Context
 Sitemap: https://peptidesandyou.com/sitemap.xml
+Host: https://peptidesandyou.com

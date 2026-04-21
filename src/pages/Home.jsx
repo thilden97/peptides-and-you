@@ -1,13 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Hero from '../components/Hero';
 import ProductCard from '../components/ProductCard';
 import { peptides } from '../data/peptides';
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, FlaskConical, FileCheck, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, FlaskConical, FileCheck, ShieldCheck, Sparkles, ChevronDown, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5, ease: 'easeOut' } }),
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.92 },
+  visible: (i = 0) => ({ opacity: 1, scale: 1, transition: { delay: i * 0.08, duration: 0.45, ease: 'easeOut' } }),
+};
+
+/* FAQ Accordion Item */
+const FAQItem = ({ question, answer, isOpen, onClick, index }) => (
+  <motion.div
+    initial="hidden" whileInView="visible" viewport={{ once: true }}
+    variants={fadeUp} custom={index}
+  >
+    <button
+      onClick={onClick}
+      className="faq-item"
+      style={{
+        width: '100%', textAlign: 'left', background: isOpen ? 'var(--primary-light)' : '#fff',
+        border: isOpen ? '1.5px solid rgba(31,111,178,0.2)' : '1.5px solid var(--border-light)',
+        borderRadius: 12, padding: '18px 22px', cursor: 'pointer',
+        transition: 'all 0.3s ease', marginBottom: 8,
+      }}
+    >
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16}}>
+        <span className="montserrat" style={{
+          fontSize: 15, fontWeight: 700, color: 'var(--text)', lineHeight: 1.4,
+        }}>{question}</span>
+        <ChevronDown size={18} color="var(--primary)" style={{
+          flexShrink: 0, transition: 'transform 0.3s ease',
+          transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+        }} />
+      </div>
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0, marginTop: isOpen ? 12 : 0 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        style={{ overflow: 'hidden' }}
+      >
+        <p style={{fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.8}}>
+          {answer}
+        </p>
+      </motion.div>
+    </button>
+  </motion.div>
+);
 
 const Home = () => {
   const featuredPeptides = peptides.filter(p => p.type === 'peptide').slice(0, 3);
+  const [openFAQ, setOpenFAQ] = useState(0);
+
+  const faqs = [
+    {
+      q: "What are peptides and how do they work?",
+      a: "Peptides are short chains of amino acids that act as signaling molecules in your body. They regulate healing, hormone production, immune function, and cognitive performance. Supplemental peptides amplify specific biological processes — for example, BPC-157 accelerates tissue repair, while Ipamorelin stimulates natural growth hormone release."
+    },
+    {
+      q: "Are your products lab tested?",
+      a: "Yes — every single product. All Peptides & You products are third-party lab tested by independent laboratories for identity (mass spectrometry) and purity (HPLC). A Certificate of Analysis (COA) is supplied with every batch, so you can verify exactly what you're getting."
+    },
+    {
+      q: "What format are the products sold in?",
+      a: "All products are sold as lyophilised (freeze-dried) powder vials. This is the pharmaceutical-grade standard for peptide storage, ensuring maximum stability and shelf life. Products should be stored in a cool, dry place and refrigerated after reconstitution."
+    },
+    {
+      q: "Do you ship to the Philippines and internationally?",
+      a: "Yes. We offer secure and discreet shipping throughout the Philippines and internationally. All orders are packaged for privacy and shipped via tracked courier services. Delivery times vary by location."
+    },
+    {
+      q: "How do I choose the right peptide for my goals?",
+      a: "Take our free 60-second Peptide Quiz — it asks about your goals, specific concerns, experience level, and budget, then matches you to the best products. You can also browse our blog for in-depth research articles on each compound, or contact us directly for guidance."
+    },
+    {
+      q: "What is a Certificate of Analysis (COA)?",
+      a: "A COA is a document produced by an independent laboratory that verifies the identity and purity of a compound. It typically includes HPLC purity testing (≥98% for pharmaceutical grade), mass spectrometry identity confirmation, and endotoxin testing. We include a COA with every order."
+    },
+    {
+      q: "Can I stack multiple peptides together?",
+      a: "Yes — many peptides are designed to work synergistically. Our most popular stack is the Wolverine Stack (BPC-157 + TB-500) for recovery, and the CJC-1295 + Ipamorelin combo for growth hormone optimisation. Read our stacking guide on the blog for detailed protocols."
+    },
+    {
+      q: "What payment methods do you accept?",
+      a: "Contact us at info@peptidesandyou.com for current payment options. We're actively integrating additional payment processors to make ordering even more convenient."
+    }
+  ];
 
   // Organization JSON-LD
   const orgSchema = {
@@ -30,7 +116,6 @@ const Home = () => {
     ]
   };
 
-  // WebSite schema for search
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -43,6 +128,24 @@ const Home = () => {
     }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(f => ({
+      "@type": "Question",
+      "name": f.q,
+      "acceptedAnswer": { "@type": "Answer", "text": f.a }
+    }))
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://peptidesandyou.com" }
+    ]
+  };
+
   const features = [
     {
       icon: FileCheck,
@@ -52,7 +155,7 @@ const Home = () => {
     {
       icon: FlaskConical,
       title: 'Pharmaceutical-Grade Quality',
-      desc: 'All products are lyophilised powder vials, manufactured to pharmaceutical standards. Consistent purity across every product we sell.',
+      desc: 'All products are lyophilised powder vials, manufactured to pharmaceutical standards. Consistent purity across every product.',
     },
     {
       icon: ShieldCheck,
@@ -65,54 +168,46 @@ const Home = () => {
     <div style={{background: 'var(--bg)'}}>
       <Helmet>
         <title>Peptides & You | Premium Pharmaceutical-Grade Peptides | Lab Tested | COA Included</title>
-        <meta name="description" content="Premium pharmaceutical-grade peptides. BPC-157, TB-500, GHK-Cu, Epithalon, Retatrutide and more. Lab tested with Certificate of Analysis. Fast delivery." />
-        <meta name="keywords" content="peptides, buy peptides, BPC-157, TB-500, GHK-Cu, peptide supplier, pharmaceutical grade peptides, COA peptides, lab tested peptides" />
+        <meta name="description" content="Premium pharmaceutical-grade peptides. BPC-157, TB-500, GHK-Cu, Epithalon, Retatrutide and more. Lab tested with Certificate of Analysis. Fast delivery Philippines." />
+        <meta name="keywords" content="peptides, buy peptides, BPC-157, TB-500, GHK-Cu, peptide supplier, pharmaceutical grade peptides, COA peptides, lab tested peptides, peptides Philippines" />
         <link rel="canonical" href="https://peptidesandyou.com" />
-
-        {/* Open Graph */}
         <meta property="og:title" content="Peptides & You | Premium Pharmaceutical-Grade Peptides" />
         <meta property="og:description" content="Lab tested peptides with COA included. BPC-157, TB-500, GHK-Cu, Retatrutide and more." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://peptidesandyou.com" />
         <meta property="og:site_name" content="Peptides and You" />
         <meta property="og:locale" content="en_PH" />
-
-        {/* Twitter */}
+        <meta property="og:image" content="https://peptidesandyou.com/logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Peptides & You | Premium Pharmaceutical-Grade Peptides" />
-        <meta name="twitter:description" content="Lab tested peptides with COA included. Fast delivery." />
-
-        {/* Geo Tags */}
+        <meta name="twitter:image" content="https://peptidesandyou.com/logo.png" />
         <meta name="geo.region" content="PH-00" />
         <meta name="geo.placename" content="Manila" />
         <meta name="geo.position" content="14.5995;120.9842" />
         <meta name="ICBM" content="14.5995, 120.9842" />
-        <meta name="DC.title" content="Peptides and You - Premium Peptides" />
-        <meta name="DC.creator" content="Peptides and You" />
-        <meta name="DC.subject" content="Peptides" />
-        <meta name="DC.language" content="en" />
-        <meta name="DC.coverage" content="Philippines" />
-
-        {/* Structured Data */}
         <script type="application/ld+json">{JSON.stringify(orgSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(websiteSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
 
       <Hero />
 
       {/* Featured Products */}
-      <section style={{padding: '64px 0'}}>
+      <section style={{padding: '72px 0'}}>
         <div className="container">
-          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 16, marginBottom: 28}}>
-            <div>
-              <h2 className="section-heading" style={{fontSize: 26}}>Featured Peptides</h2>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 16, marginBottom: 32}}>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+              <h2 className="section-heading" style={{fontSize: 28}}>Featured Peptides</h2>
               <p style={{color: 'var(--text-secondary)', fontSize: 14, maxWidth: 450, lineHeight: 1.6}}>
                 Our most popular lab-tested compounds, trusted by practitioners and clients.
               </p>
-            </div>
-            <Link to="/shop" className="btn-outline" style={{padding: '10px 22px', fontSize: 13}}>
-              View All Products <ArrowRight size={16} />
-            </Link>
+            </motion.div>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}>
+              <Link to="/shop" className="btn-outline btn-hover-lift" style={{padding: '10px 22px', fontSize: 13}}>
+                View All Products <ArrowRight size={16} />
+              </Link>
+            </motion.div>
           </div>
           <div className="product-grid">
             {featuredPeptides.map(product => (
@@ -122,65 +217,155 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Why Us */}
-      <section id="about" style={{padding: '64px 0', background: '#fff'}}>
+      {/* Quiz CTA Banner */}
+      <section style={{padding: '56px 0', background: 'var(--accent-light)'}}>
         <div className="container">
-          <div style={{textAlign: 'center', marginBottom: 40}}>
-            <h2 className="section-heading" style={{fontSize: 26}}>Why Peptides & You</h2>
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              flexWrap: 'wrap', gap: 28,
+            }}
+          >
+            <div style={{maxWidth: 500}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10}}>
+                <Sparkles size={18} color="var(--accent)" />
+                <span style={{fontSize: 12, fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.06em'}}>
+                  Personalized Recommendation
+                </span>
+              </div>
+              <h2 className="montserrat" style={{fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 8}}>
+                Not sure which peptide is right for you?
+              </h2>
+              <p style={{fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7}}>
+                Take our 60-second quiz and get personalized product recommendations based on your goals, experience level, and budget.
+              </p>
+            </div>
+            <Link to="/quiz" className="btn-primary btn-hover-lift" style={{padding: '14px 32px', fontSize: 15}}>
+              Take the Quiz <ArrowRight size={18} />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Why Us */}
+      <section id="about" style={{padding: '72px 0', background: '#fff'}}>
+        <div className="container">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+            style={{textAlign: 'center', marginBottom: 40}}>
+            <h2 className="section-heading" style={{fontSize: 28}}>Why Peptides & You</h2>
             <p style={{color: 'var(--text-secondary)', fontSize: 14, maxWidth: 520, margin: '0 auto', lineHeight: 1.6}}>
               Premium quality, lab-verified purity, and transparent sourcing — everything you need to trust what you're using.
             </p>
-          </div>
+          </motion.div>
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20}}>
-            {features.map((f) => (
-              <div key={f.title} style={{
-                background: 'var(--bg)', padding: '32px 28px', borderRadius: 14,
-                border: '1px solid var(--border)', transition: 'all 0.3s',
-              }}>
+            {features.map((f, i) => (
+              <motion.div key={f.title}
+                initial="hidden" whileInView="visible" viewport={{ once: true }}
+                variants={scaleIn} custom={i}
+                className="feature-card"
+                style={{
+                  background: 'var(--bg)', padding: '32px 28px', borderRadius: 14,
+                  border: '1px solid var(--border)', transition: 'all 0.3s ease',
+                }}>
                 <div style={{
                   width: 48, height: 48, borderRadius: 10,
                   background: 'var(--primary-light)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: 18,
+                  marginBottom: 18, transition: 'all 0.3s',
                 }}>
                   <f.icon size={24} color="var(--primary)" />
                 </div>
-                <h3 className="outfit" style={{fontSize: 17, fontWeight: 700, marginBottom: 8, color: 'var(--text)'}}>
+                <h3 className="montserrat" style={{fontSize: 17, fontWeight: 700, marginBottom: 8, color: 'var(--text)'}}>
                   {f.title}
                 </h3>
                 <p style={{fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7}}>
                   {f.desc}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section style={{padding: '72px 0', background: '#1A1A2E', position: 'relative', overflow: 'hidden'}}>
+      {/* ===== FAQ / Q&A Section ===== */}
+      <section style={{padding: '72px 0', background: 'var(--bg)'}}>
+        <div className="container" style={{maxWidth: 800}}>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+            style={{textAlign: 'center', marginBottom: 40}}>
+            <div className="coa-badge" style={{marginBottom: 16}}>
+              <HelpCircle size={14} /> Frequently Asked Questions
+            </div>
+            <h2 className="montserrat" style={{fontSize: 28, fontWeight: 700, color: 'var(--text)', marginBottom: 10}}>
+              Got Questions? We've Got <span style={{
+                background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              }}>Answers.</span>
+            </h2>
+            <p style={{fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: 520, margin: '0 auto'}}>
+              Everything you need to know about our products, quality standards, and ordering process.
+            </p>
+          </motion.div>
+
+          <div>
+            {faqs.map((faq, i) => (
+              <FAQItem
+                key={i}
+                index={i}
+                question={faq.q}
+                answer={faq.a}
+                isOpen={openFAQ === i}
+                onClick={() => setOpenFAQ(openFAQ === i ? -1 : i)}
+              />
+            ))}
+          </div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+            style={{textAlign: 'center', marginTop: 32}}>
+            <p style={{fontSize: 14, color: 'var(--text-muted)', marginBottom: 14}}>
+              Still have questions?
+            </p>
+            <Link to="/contact" className="btn-outline btn-hover-lift" style={{padding: '12px 28px', fontSize: 14}}>
+              Contact Us <ArrowRight size={16} />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section style={{padding: '80px 0', background: '#0F1B2D', position: 'relative', overflow: 'hidden'}}>
         <div style={{
           position: 'absolute', top: '50%', right: '10%', transform: 'translateY(-50%)',
           width: 400, height: 400,
-          background: 'radial-gradient(circle, rgba(212,175,55,0.1), transparent 70%)',
+          background: 'radial-gradient(circle, rgba(79,191,159,0.12), transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute', top: '30%', left: '5%',
+          width: 300, height: 300,
+          background: 'radial-gradient(circle, rgba(31,111,178,0.1), transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div className="container" style={{position: 'relative', zIndex: 2}}>
-          <div style={{maxWidth: 600, margin: '0 auto', textAlign: 'center'}}>
-            <h2 className="outfit" style={{
-              fontSize: 'clamp(24px, 4vw, 42px)', fontWeight: 800,
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+            style={{maxWidth: 600, margin: '0 auto', textAlign: 'center'}}>
+            <h2 className="montserrat" style={{
+              fontSize: 'clamp(24px, 4vw, 42px)', fontWeight: 700,
               color: '#fff', marginBottom: 16, lineHeight: 1.2,
             }}>
               Your Body Deserves{' '}
-              <span style={{color: '#D4AF37'}}>Premium Grade.</span>
+              <span style={{
+                background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              }}>Premium Grade.</span>
             </h2>
             <p style={{fontSize: 15, color: 'rgba(255,255,255,0.55)', marginBottom: 28, lineHeight: 1.7}}>
               Every product lab tested. COA included. Trusted by practitioners across Southeast Asia.
             </p>
-            <Link to="/shop" className="btn-primary" style={{padding: '14px 32px', fontSize: 15}}>
+            <Link to="/shop" className="btn-primary btn-hover-lift" style={{padding: '14px 32px', fontSize: 15}}>
               Browse the Catalog <ArrowRight size={18} />
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>
