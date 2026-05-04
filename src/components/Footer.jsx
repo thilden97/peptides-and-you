@@ -16,7 +16,7 @@ const Footer = () => {
         }}>
           {/* Brand */}
           <div>
-            <img src="/logo.png" alt="Peptides & You" style={{
+            <img src="/logo.jpg" alt="Peptides & You" style={{
               height: 64, marginBottom: 16,
               filter: 'brightness(2) contrast(0.9)',
             }} />

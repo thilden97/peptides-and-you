@@ -36,7 +36,7 @@ const About = () => {
         <link rel="canonical" href="https://peptidesandyou.com/about" />
         <meta property="og:title" content="About Peptides & You" />
         <meta property="og:description" content="Trusted peptide supplier in the Philippines — lab tested, COA included." />
-        <meta property="og:image" content="https://peptidesandyou.com/logo.png" />
+        <meta property="og:image" content="https://peptidesandyou.com/logo.jpg" />
       </Helmet>
 
       {/* Hero */}

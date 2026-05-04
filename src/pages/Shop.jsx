@@ -81,7 +81,7 @@ const Shop = () => {
         <meta property="og:description" content="Premium lab-tested peptides with COA included." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://peptidesandyou.com/shop" />
-        <meta property="og:image" content="https://peptidesandyou.com/logo.png" />
+        <meta property="og:image" content="https://peptidesandyou.com/logo.jpg" />
         <script type="application/ld+json">{JSON.stringify(productListSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>

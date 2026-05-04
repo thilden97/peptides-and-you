@@ -63,7 +63,7 @@ const Navbar = () => {
         }}>
           {/* Logo */}
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img src="/logo.png" alt="Peptides & You" style={{ height: 64, width: 'auto', objectFit: 'contain' }} />
+            <img src="/logo.jpg" alt="Peptides & You" style={{ height: 64, width: 'auto', objectFit: 'contain' }} />
           </Link>
 
           {/* Desktop Nav */}
