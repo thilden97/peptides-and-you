@@ -17,8 +17,8 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <img src="/logo.png" alt="Peptides & You" style={{
-              height: 32, marginBottom: 16,
-              filter: 'brightness(1.5)',
+              height: 64, marginBottom: 16,
+              filter: 'brightness(2) contrast(0.9)',
             }} />
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: 16 }}>
               Pharmaceutical-grade peptides, lab tested with Certificate of Analysis. Serving the Philippines and Southeast Asia.

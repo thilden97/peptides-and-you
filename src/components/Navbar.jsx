@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingBag, ShieldCheck, Truck, Award, FlaskConical } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { Menu, X, ShieldCheck, Truck, Award, FlaskConical, MessageCircle } from 'lucide-react';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { totalItems, setIsCartOpen } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -25,6 +23,9 @@ const Navbar = () => {
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' },
   ];
+
+  // WhatsApp placeholder — replace with client's number
+  const whatsappUrl = 'https://wa.me/639XXXXXXXXX?text=Hi!%20I%27d%20like%20to%20learn%20more%20about%20your%20peptides.';
 
   return (
     <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}>
@@ -58,11 +59,11 @@ const Navbar = () => {
         <div style={{
           maxWidth: 1180, margin: '0 auto',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          height: 64,
+          height: 68,
         }}>
           {/* Logo */}
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img src="/logo.png" alt="Peptides & You" style={{ height: 36 }} />
+            <img src="/logo.png" alt="Peptides & You" style={{ height: 64, width: 'auto', objectFit: 'contain' }} />
           </Link>
 
           {/* Desktop Nav */}
@@ -84,29 +85,15 @@ const Navbar = () => {
 
           {/* Right Actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            {/* Cart */}
-            <button onClick={() => setIsCartOpen(true)} style={{
-              position: 'relative', width: 40, height: 40, borderRadius: 10,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'var(--primary-light)', transition: 'all 0.2s',
-            }}>
-              <ShoppingBag size={18} color="var(--primary)" />
-              {totalItems > 0 && (
-                <span style={{
-                  position: 'absolute', top: -4, right: -4,
-                  width: 18, height: 18, borderRadius: '50%',
-                  background: 'var(--brand-gradient)', color: '#fff',
-                  fontSize: 10, fontWeight: 700,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {totalItems}
-                </span>
-              )}
-            </button>
+            {/* WhatsApp CTA */}
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
+              className="btn-primary desktop-nav" style={{ padding: '9px 20px', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <MessageCircle size={14} /> Order Now
+            </a>
 
             {/* Shop CTA */}
-            <Link to="/shop" className="btn-primary desktop-nav" style={{ padding: '9px 20px', fontSize: 12 }}>
-              Shop Now
+            <Link to="/shop" className="btn-outline desktop-nav" style={{ padding: '9px 20px', fontSize: 12 }}>
+              Shop All
             </Link>
 
             {/* Mobile Hamburger */}
@@ -136,11 +123,13 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <Link to="/shop" className="btn-primary" style={{
-            display: 'block', textAlign: 'center', marginTop: 16, padding: '13px 28px',
-          }}>
-            Shop All Peptides
-          </Link>
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
+            className="btn-primary" style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              marginTop: 16, padding: '13px 28px',
+            }}>
+            <MessageCircle size={16} /> Order via WhatsApp
+          </a>
         </div>
       )}
 
