@@ -41,7 +41,7 @@ const BlogPost = () => {
     "datePublished": post.date,
     "dateModified": post.date,
     "author": { "@type": "Organization", "name": "Peptides and You" },
-    "publisher": { "@type": "Organization", "name": "Peptides and You", "logo": { "@type": "ImageObject", "url": "https://peptidesandyou.com/logo.jpg" } },
+    "publisher": { "@type": "Organization", "name": "Peptides and You", "logo": { "@type": "ImageObject", "url": "https://peptidesandyou.com/logo.png" } },
     "mainEntityOfPage": { "@type": "WebPage", "@id": `https://peptidesandyou.com/blog/${post.slug}` },
     "keywords": post.seoKeywords.join(', '),
   };

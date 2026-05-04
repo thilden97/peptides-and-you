@@ -58,7 +58,7 @@ const Blog = () => {
         <meta property="og:description" content="Expert peptide research articles, protocols, and guides." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://peptidesandyou.com/blog" />
-        <meta property="og:image" content="https://peptidesandyou.com/logo.jpg" />
+        <meta property="og:image" content="https://peptidesandyou.com/logo.png" />
         <meta name="geo.region" content="PH-00" />
         <script type="application/ld+json">{JSON.stringify(blogSchema)}</script>
       </Helmet>

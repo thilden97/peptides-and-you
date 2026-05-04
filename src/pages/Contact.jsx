@@ -31,7 +31,7 @@ const Contact = () => {
         <link rel="canonical" href="https://peptidesandyou.com/contact" />
         <meta property="og:title" content="Contact Us | Peptides & You" />
         <meta property="og:description" content="Get in touch with Peptides & You for peptide inquiries and orders." />
-        <meta property="og:image" content="https://peptidesandyou.com/logo.jpg" />
+        <meta property="og:image" content="https://peptidesandyou.com/logo.png" />
       </Helmet>
 
       <div className="container" style={{maxWidth: 960}}>

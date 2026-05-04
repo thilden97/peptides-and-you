@@ -133,7 +133,7 @@ const Home = () => {
     "@type": "Organization",
     "name": "Peptides and You",
     "url": "https://peptidesandyou.com",
-    "logo": "https://peptidesandyou.com/logo.jpg",
+    "logo": "https://peptidesandyou.com/logo.png",
     "description": "Premium pharmaceutical-grade peptides. Lab tested with Certificate of Analysis included.",
     "contactPoint": {
       "@type": "ContactPoint",
@@ -191,10 +191,10 @@ const Home = () => {
         <meta property="og:url" content="https://peptidesandyou.com" />
         <meta property="og:site_name" content="Peptides and You" />
         <meta property="og:locale" content="en_PH" />
-        <meta property="og:image" content="https://peptidesandyou.com/logo.jpg" />
+        <meta property="og:image" content="https://peptidesandyou.com/logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Peptides & You | Premium Pharmaceutical-Grade Peptides" />
-        <meta name="twitter:image" content="https://peptidesandyou.com/logo.jpg" />
+        <meta name="twitter:image" content="https://peptidesandyou.com/logo.png" />
         <meta name="geo.region" content="PH-00" />
         <meta name="geo.placename" content="Manila" />
         <meta name="geo.position" content="14.5995;120.9842" />
