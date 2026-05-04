@@ -1,91 +1,75 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Star } from 'lucide-react';
-
-const Stars = ({ rating = 5 }) => (
-  <div className="stars">
-    {[...Array(5)].map((_, i) => (
-      <Star key={i} size={13}
-        fill={i < rating ? '#1F6FB2' : 'transparent'}
-        color={i < rating ? '#1F6FB2' : '#D4D4D8'}
-        strokeWidth={1.5} />
-    ))}
-  </div>
-);
-
-const formatPrice = (price) => {
-  return `₱${price.toLocaleString()}`;
-};
+import { ShieldCheck, Star, FileCheck } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
-  const firstVariant = product.variants[0];
+  const minPrice = Math.min(...product.variants.map(v => v.price));
   const hasMultipleVariants = product.variants.length > 1;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="product-card"
-    >
-      <div className="product-card-image">
-        {product.type === 'stack' && <div className="badge-top">Stack</div>}
-        {/* Branded vial image with logo overlay */}
-        <img src="/peptide-vial-branded.png" alt={`${product.name} peptide vial — Peptides & You`} style={{
-          width: '100%', height: '100%', objectFit: 'cover',
-        }} />
-        {/* Small logo watermark */}
+    <Link to={`/product/${product.id}`} className="product-card" style={{ display: 'flex', flexDirection: 'column' }}>
+      {/* Image Section */}
+      <div className="product-card-image" style={{ background: '#FAFAF8' }}>
+        <div className="badge-top">{product.category}</div>
         <img
-          src="/logo.png"
-          alt=""
-          aria-hidden="true"
-          style={{
-            position: 'absolute', bottom: 8, right: 8,
-            height: 24, width: 'auto', objectFit: 'contain',
-            opacity: 0.7, filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))',
-            pointerEvents: 'none',
-          }}
+          src={product.image}
+          alt={product.name}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', padding: 16 }}
+          loading="lazy"
         />
       </div>
 
-      <div className="product-card-body">
+      {/* Body */}
+      <div className="product-card-body" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        {/* Title Row */}
         <div className="card-title-row">
-          <Link to={`/product/${product.id}`} style={{textDecoration: 'none'}}>
-            <h3 className="card-title">{product.name}</h3>
-          </Link>
-          {firstVariant && <span className="card-size">{firstVariant.size}</span>}
-        </div>
-
-        <span style={{
-          display: 'inline-block', fontSize: 10, fontWeight: 600,
-          color: 'var(--primary)', background: 'var(--primary-light)',
-          padding: '2px 8px', borderRadius: 4, marginBottom: 6,
-          textTransform: 'uppercase', letterSpacing: '0.04em',
-        }}>{product.category}</span>
-
-        <Stars rating={product.rating} />
-
-        <p style={{
-          fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5,
-          margin: '6px 0 10px', minHeight: 36,
-          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-        }}>{product.shortDescription}</p>
-
-        <div className="card-price">
-          {hasMultipleVariants ? (
-            <span>From {formatPrice(firstVariant.price)}</span>
-          ) : (
-            <span>{formatPrice(firstVariant.price)}</span>
+          <span className="card-title">{product.name}</span>
+          {product.variants.length > 0 && (
+            <span className="card-size">{product.variants[0].label}</span>
           )}
         </div>
 
-        <Link to={`/product/${product.id}`} className="card-btn">
-          View Details
-        </Link>
+        {/* Description */}
+        <p style={{
+          fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6,
+          marginBottom: 10, flex: 1,
+          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+        }}>
+          {product.shortDescription}
+        </p>
+
+        {/* Trust Badges */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, color: 'var(--primary)' }}>
+            <ShieldCheck size={12} /> Lab Tested
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 600, color: 'var(--primary)' }}>
+            <FileCheck size={12} /> COA Included
+          </div>
+        </div>
+
+        {/* Rating */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+          <div className="stars">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={12} fill={i < Math.floor(product.rating) ? '#B8860B' : 'none'}
+                color={i < Math.floor(product.rating) ? '#B8860B' : '#D4D4D8'} />
+            ))}
+          </div>
+          <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)' }}>
+            {product.rating}
+          </span>
+        </div>
+
+        {/* Price */}
+        <div className="card-price">
+          {hasMultipleVariants ? `From ₱${minPrice.toLocaleString()}` : `₱${minPrice.toLocaleString()}`}
+        </div>
+
+        {/* CTA */}
+        <span className="card-btn">View Details</span>
       </div>
-    </motion.div>
+    </Link>
   );
 };
 

@@ -44,7 +44,7 @@ const Contact = () => {
             fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, color: 'var(--text)', marginBottom: 12,
           }}>
             How Can We <span style={{
-              background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)',
+              background: 'var(--brand-gradient)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             }}>Help You?</span>
           </h1>

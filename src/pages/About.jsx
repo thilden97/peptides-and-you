@@ -58,7 +58,7 @@ const About = () => {
             }}>
               Science-Backed.{' '}
               <span style={{
-                background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)',
+                background: 'var(--brand-gradient)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
               }}>Transparently Sourced.</span>
             </h1>

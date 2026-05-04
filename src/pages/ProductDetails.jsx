@@ -1,323 +1,267 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { peptides } from '../data/peptides';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { ShoppingCart, ArrowLeft, CheckCircle2, ShieldCheck, FileText, Star, Database } from 'lucide-react';
+import { peptides, getProductById } from '../data/peptides';
+import { useCart } from '../context/CartContext';
+import {
+  ShieldCheck, FileCheck, Star, Check, Download, ShoppingBag,
+  ArrowLeft, ChevronRight, FlaskConical, Award, Package
+} from 'lucide-react';
+import ProductCard from '../components/ProductCard';
 
-const Stars = ({ rating = 5 }) => (
-  <div className="stars" style={{marginBottom: 6}}>
-    {[...Array(5)].map((_, i) => (
-      <Star key={i} size={15}
-        fill={i < rating ? '#1F6FB2' : 'transparent'}
-        color={i < rating ? '#1F6FB2' : '#D4D4D8'}
-        strokeWidth={1.5} />
-    ))}
-  </div>
-);
-
-const formatPrice = (price) => `₱${price.toLocaleString()}`;
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5, ease: 'easeOut' } }),
+};
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const product = peptides.find(p => p.id === id);
+  const product = getProductById(id);
+  const { addItem } = useCart();
   const [selectedVariant, setSelectedVariant] = useState(0);
+  const [addedFeedback, setAddedFeedback] = useState(false);
 
-  useEffect(() => { window.scrollTo(0, 0); setSelectedVariant(0); }, [id]);
+  useEffect(() => { window.scrollTo(0, 0); setSelectedVariant(0); setAddedFeedback(false); }, [id]);
 
-  if (!product) return (
-    <div style={{paddingTop: 240, textAlign: 'center', fontSize: 20, fontWeight: 700, color: 'var(--text-secondary)', minHeight: '60vh'}}>
-      Product not found.
-    </div>
-  );
+  if (!product) {
+    return (
+      <div style={{ paddingTop: 200, textAlign: 'center', minHeight: '60vh' }}>
+        <h2 className="montserrat" style={{ fontSize: 24, marginBottom: 12 }}>Product Not Found</h2>
+        <Link to="/shop" className="btn-primary">Browse All Peptides</Link>
+      </div>
+    );
+  }
 
-  const currentVariant = product.variants[selectedVariant];
+  const variant = product.variants[selectedVariant];
+  const relatedProducts = peptides.filter(p => p.id !== product.id && p.category === product.category).slice(0, 3);
+  const reviewCount = Math.floor(product.rating * 14 + 23);
 
-  // Product JSON-LD
+  const handleAddToCart = () => {
+    addItem(product, variant);
+    setAddedFeedback(true);
+    setTimeout(() => setAddedFeedback(false), 2000);
+  };
+
+  // JSON-LD
   const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": product.name,
-    "description": product.description,
-    "image": "https://peptidesandyou.com/peptide-vial-branded.png",
-    "sku": product.id,
-    "brand": { "@type": "Brand", "name": "Peptides and You" },
-    "url": `https://peptidesandyou.com/product/${product.id}`,
-    "offers": product.variants.map(v => ({
-      "@type": "Offer",
-      "priceCurrency": "PHP",
-      "price": v.price,
-      "availability": "https://schema.org/InStock",
-      "url": `https://peptidesandyou.com/product/${product.id}`,
-      "seller": { "@type": "Organization", "name": "Peptides and You" },
-    })),
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": product.rating,
-      "reviewCount": 47,
-      "bestRating": 5
-    }
-  };
-
-  // BreadcrumbList JSON-LD
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://peptidesandyou.com" },
-      { "@type": "ListItem", "position": 2, "name": "Shop", "item": "https://peptidesandyou.com/shop" },
-      { "@type": "ListItem", "position": 3, "name": product.name, "item": `https://peptidesandyou.com/product/${product.id}` },
-    ]
-  };
-
-  // FAQ JSON-LD per product
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": `What is ${product.name}?`,
-        "acceptedAnswer": { "@type": "Answer", "text": product.description }
-      },
-      {
-        "@type": "Question",
-        "name": `What are the benefits of ${product.name}?`,
-        "acceptedAnswer": { "@type": "Answer", "text": product.benefits.join('. ') + '.' }
-      },
-      {
-        "@type": "Question",
-        "name": `How much does ${product.name} cost?`,
-        "acceptedAnswer": { "@type": "Answer", "text": `${product.name} is available in ${product.variants.length} size${product.variants.length > 1 ? 's' : ''}: ${product.variants.map(v => `${v.size} at ₱${v.price.toLocaleString()}`).join(', ')}.` }
-      },
-      {
-        "@type": "Question",
-        "name": `Is ${product.name} lab tested?`,
-        "acceptedAnswer": { "@type": "Answer", "text": `Yes. All Peptides & You products, including ${product.name}, are third-party lab tested and supplied with a Certificate of Analysis (COA) to verify identity and purity.` }
-      }
-    ]
+    "@context": "https://schema.org", "@type": "Product",
+    name: product.name, description: product.shortDescription,
+    image: `https://peptidesandyou.com${product.image}`,
+    url: `https://peptidesandyou.com/product/${product.id}`,
+    brand: { "@type": "Brand", name: "Peptides and You" },
+    offers: {
+      "@type": "AggregateOffer", priceCurrency: "PHP",
+      lowPrice: Math.min(...product.variants.map(v => v.price)),
+      highPrice: Math.max(...product.variants.map(v => v.price)),
+      offerCount: product.variants.length,
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: { "@type": "AggregateRating", ratingValue: product.rating, reviewCount, bestRating: 5 },
   };
 
   return (
-    <div style={{paddingTop: 180, paddingBottom: 60, background: 'var(--bg)', minHeight: '100vh'}}>
+    <div style={{ paddingTop: 180, paddingBottom: 80, background: '#fff', minHeight: '100vh' }}>
       <Helmet>
-        <title>{product.name} | Lab Tested Peptide | Buy Online | Peptides & You</title>
-        <meta name="description" content={`${product.shortDescription} Lab tested with COA included. Fast delivery.`} />
-        <meta name="keywords" content={product.seoKeywords.join(', ') + ', buy peptides, lab tested peptides'} />
+        <title>{product.name} | Lab Tested | Peptides & You</title>
+        <meta name="description" content={product.shortDescription} />
         <link rel="canonical" href={`https://peptidesandyou.com/product/${product.id}`} />
         <meta property="og:title" content={`${product.name} | Peptides & You`} />
         <meta property="og:description" content={product.shortDescription} />
-        <meta property="og:type" content="product" />
-        <meta property="og:url" content={`https://peptidesandyou.com/product/${product.id}`} />
-        <meta property="og:image" content="https://peptidesandyou.com/peptide-vial-branded.png" />
-        <meta property="product:price:amount" content={currentVariant.price} />
-        <meta property="product:price:currency" content="PHP" />
-        <meta name="geo.region" content="PH-00" />
-        <meta name="geo.placename" content="Manila" />
+        <meta property="og:image" content={`https://peptidesandyou.com${product.image}`} />
         <script type="application/ld+json">{JSON.stringify(productSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
-      <div className="container">
-        <Link to="/shop" style={{
-          display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 24,
-          color: 'var(--text-secondary)', fontWeight: 700, fontSize: 13, letterSpacing: '0.04em',
-        }}>
-          <ArrowLeft size={15} /> Back to Catalog
-        </Link>
+      <div className="container" style={{ maxWidth: 1080 }}>
+        {/* Breadcrumb */}
+        <motion.div initial="hidden" animate="visible" variants={fadeUp}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 32, fontSize: 13, color: 'var(--text-muted)' }}>
+          <Link to="/" style={{ color: 'var(--text-muted)', transition: 'color 0.2s' }}>Home</Link>
+          <ChevronRight size={14} />
+          <Link to="/shop" style={{ color: 'var(--text-muted)', transition: 'color 0.2s' }}>Shop</Link>
+          <ChevronRight size={14} />
+          <span style={{ color: 'var(--primary)', fontWeight: 600 }}>{product.name}</span>
+        </motion.div>
 
-        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'flex-start'}}>
-          {/* Image — branded vial with logo */}
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{position: 'sticky', top: 200}}>
+        {/* Product Layout */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
+          {/* Left — Image */}
+          <motion.div initial="hidden" animate="visible" variants={fadeUp}>
             <div style={{
-              background: '#fff', aspectRatio: '1', borderRadius: 16,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '1px solid var(--border)', position: 'relative',
-              overflow: 'hidden',
+              background: '#FAFAF8', borderRadius: 20, padding: 32,
+              border: '1px solid var(--border-light)', position: 'relative',
             }}>
-              <img src="/peptide-vial-branded.png" alt={`${product.name} peptide vial — Peptides & You`} style={{
-                width: '70%', height: '70%', objectFit: 'contain',
-              }} />
-
-              {/* Logo overlay */}
-              <img
-                src="/logo.png"
-                alt=""
-                aria-hidden="true"
-                style={{
-                  position: 'absolute', top: 16, left: 16,
-                  height: 36, width: 'auto', objectFit: 'contain',
-                  opacity: 0.8,
-                }}
-              />
-
-              {currentVariant && (
-                <div style={{
-                  position: 'absolute', top: 16, right: 16,
-                  background: 'var(--primary-light)', padding: '5px 12px', borderRadius: 6,
-                  fontSize: 12, fontWeight: 700, color: 'var(--primary)',
-                  border: '1px solid rgba(31,111,178,0.15)',
-                }}>
-                  {currentVariant.size}
-                </div>
-              )}
-
+              {/* Category Badge */}
               <div style={{
-                position: 'absolute', bottom: 16, right: 16,
-                background: '#fff', padding: '10px 14px', borderRadius: 10,
-                boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)',
-                display: 'flex', alignItems: 'center', gap: 10,
+                position: 'absolute', top: 16, left: 16,
+                background: 'var(--brand-gradient)', color: '#fff',
+                padding: '4px 12px', borderRadius: 8,
+                fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
               }}>
-                <div style={{width: 32, height: 32, borderRadius: 8, background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <ShieldCheck size={17} color="#16A34A" />
-                </div>
-                <div>
-                  <p style={{fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)'}}>Status</p>
-                  <p style={{fontSize: 13, fontWeight: 700, color: 'var(--text)'}}>Lab Tested</p>
-                </div>
+                {product.category}
               </div>
+              <img src={product.image} alt={product.name} style={{
+                width: '100%', maxHeight: 480, objectFit: 'contain',
+              }} />
             </div>
           </motion.div>
 
-          {/* Info */}
-          <motion.div initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }}>
-            {/* Category */}
-            <span style={{
-              display: 'inline-block', padding: '4px 12px', borderRadius: 6,
-              background: 'var(--primary-light)', border: '1px solid rgba(31,111,178,0.15)',
-              fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
-              color: 'var(--primary)', marginBottom: 12,
-            }}>
-              {product.category}
-            </span>
+          {/* Right — Details */}
+          <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={1}>
+            {/* Trust Badges */}
+            <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+              <div className="coa-badge"><ShieldCheck size={13} /> Lab Tested</div>
+              <div className="coa-badge"><FileCheck size={13} /> COA Included</div>
+              <div className="coa-badge"><Package size={13} /> Lyophilised Powder</div>
+            </div>
 
-            <h1 className="montserrat" style={{fontSize: 40, fontWeight: 700, color: 'var(--text)', marginBottom: 10, letterSpacing: '0.01em'}}>
+            {/* Title */}
+            <h1 className="montserrat" style={{
+              fontSize: 'clamp(28px, 3.5vw, 38px)', fontWeight: 800,
+              marginBottom: 8, lineHeight: 1.15,
+            }}>
               {product.name}
             </h1>
 
-            <Stars rating={product.rating} />
-
-            {/* Variant Selector */}
-            {product.variants.length > 1 && (
-              <div style={{margin: '16px 0 8px'}}>
-                <p style={{fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8}}>
-                  Select Size
-                </p>
-                <div style={{display: 'flex', gap: 8, flexWrap: 'wrap'}}>
-                  {product.variants.map((v, i) => (
-                    <button key={i}
-                      onClick={() => setSelectedVariant(i)}
-                      style={{
-                        padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
-                        cursor: 'pointer', transition: 'all 0.2s',
-                        background: selectedVariant === i ? 'var(--primary)' : '#fff',
-                        color: selectedVariant === i ? '#fff' : 'var(--text)',
-                        border: selectedVariant === i ? '2px solid var(--primary)' : '2px solid var(--border)',
-                      }}
-                    >
-                      {v.size} — {formatPrice(v.price)}
-                    </button>
-                  ))}
-                </div>
+            {/* Rating */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+              <div className="stars">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={16} fill={i < Math.floor(product.rating) ? '#B8860B' : 'none'}
+                    color={i < Math.floor(product.rating) ? '#B8860B' : '#D4D4D8'} />
+                ))}
               </div>
-            )}
-
-            <div style={{display: 'flex', alignItems: 'center', gap: 16, margin: '16px 0 24px'}}>
-              <p className="montserrat" style={{fontSize: 28, fontWeight: 700, color: 'var(--primary)'}}>
-                {formatPrice(currentVariant.price)}
-              </p>
-              <div style={{height: 28, width: 1, background: 'var(--border)'}} />
-              <p style={{display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: '#16A34A'}}>
-                <CheckCircle2 size={15} /> In Stock
-              </p>
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-secondary)' }}>
+                {product.rating} <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>({reviewCount} reviews)</span>
+              </span>
             </div>
 
-            <p style={{fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 28}}>
-              {product.description}
+            {/* Description */}
+            <p style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: 24 }}>
+              {product.shortDescription}
             </p>
 
+            {/* Variant Selector */}
+            <div style={{ marginBottom: 24 }}>
+              <label style={{
+                display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-muted)',
+                textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10,
+              }}>
+                Select Size
+              </label>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {product.variants.map((v, i) => (
+                  <button key={i} onClick={() => setSelectedVariant(i)} style={{
+                    padding: '12px 24px', borderRadius: 10,
+                    border: selectedVariant === i ? '2px solid var(--primary)' : '2px solid var(--border)',
+                    background: selectedVariant === i ? 'var(--primary-light)' : '#fff',
+                    fontSize: 14, fontWeight: 700,
+                    color: selectedVariant === i ? 'var(--primary)' : 'var(--text-secondary)',
+                    transition: 'all 0.2s', cursor: 'pointer',
+                  }}>
+                    {v.label} — ₱{v.price.toLocaleString()}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Price */}
+            <div className="montserrat" style={{
+              fontSize: 32, fontWeight: 800, color: 'var(--primary)', marginBottom: 24,
+            }}>
+              ₱{variant.price.toLocaleString()}
+            </div>
+
+            {/* Add to Cart */}
+            <button onClick={handleAddToCart} className="btn-primary" style={{
+              width: '100%', padding: '16px 32px', fontSize: 16, marginBottom: 12,
+              background: addedFeedback ? '#16A34A' : undefined,
+            }}>
+              {addedFeedback ? (
+                <><Check size={18} /> Added to Cart!</>
+              ) : (
+                <><ShoppingBag size={18} /> Add to Cart</>
+              )}
+            </button>
+
+            {/* COA Download */}
+            <button style={{
+              width: '100%', padding: '14px 28px', borderRadius: 10,
+              border: '2px solid var(--primary)', background: 'transparent',
+              color: 'var(--primary)', fontSize: 14, fontWeight: 700,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              transition: 'all 0.2s', cursor: 'pointer', marginBottom: 32,
+            }}>
+              <Download size={16} /> Download Certificate of Analysis (COA)
+            </button>
+
             {/* Benefits */}
-            <div style={{background: '#fff', padding: 24, borderRadius: 12, border: '1px solid var(--border)', marginBottom: 24}}>
-              <h3 className="montserrat" style={{fontSize: 15, fontWeight: 700, marginBottom: 14, color: 'var(--text)'}}>Key Benefits</h3>
-              <ul style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, listStyle: 'none', padding: 0}}>
+            <div style={{
+              background: '#FAFAF8', padding: 24, borderRadius: 14,
+              border: '1px solid var(--border-light)',
+            }}>
+              <h3 className="montserrat" style={{ fontSize: 15, fontWeight: 700, marginBottom: 14 }}>
+                Key Benefits
+              </h3>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {product.benefits.map((benefit, i) => (
-                  <li key={i} style={{display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)'}}>
-                    <CheckCircle2 size={15} color="var(--accent)" style={{marginTop: 2, flexShrink: 0}} />
+                  <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14, color: 'var(--text-secondary)' }}>
+                    <div style={{
+                      width: 22, height: 22, borderRadius: 6, flexShrink: 0,
+                      background: 'var(--primary-light)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <Check size={12} color="var(--primary)" />
+                    </div>
                     {benefit}
                   </li>
                 ))}
               </ul>
             </div>
-
-            {/* CTAs */}
-            <div style={{display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 360, marginBottom: 28}}>
-              <button className="btn-primary" style={{padding: '14px 28px', fontSize: 15, width: '100%'}}>
-                <ShoppingCart size={18} /> Inquire Now
-              </button>
-              <button className="btn-outline" style={{padding: '12px 28px', fontSize: 14, width: '100%'}}>
-                <FileText size={18} /> Download COA
-              </button>
-            </div>
-
-            {/* Quick Specs */}
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12}}>
-              {[
-                { label: 'Format', value: 'Lyophilised' },
-                { label: 'Lab Tested', value: '✓ Verified' },
-                { label: 'COA', value: 'Included' },
-              ].map(spec => (
-                <div key={spec.label} style={{
-                  background: '#fff', border: '1px solid var(--border)',
-                  padding: '16px 12px', borderRadius: 10, textAlign: 'center',
-                }}>
-                  <span style={{display: 'block', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 4}}>
-                    {spec.label}
-                  </span>
-                  <span className="montserrat" style={{fontSize: 17, fontWeight: 700, color: 'var(--text)'}}>{spec.value}</span>
-                </div>
-              ))}
-            </div>
           </motion.div>
         </div>
 
-        {/* Scientific Section */}
-        <section style={{marginTop: 64, paddingTop: 40, borderTop: '1px solid var(--border)'}}>
-          <div style={{display: 'grid', gridTemplateColumns: '280px 1fr', gap: 40}}>
-            <div>
-              <div style={{
-                width: 44, height: 44, borderRadius: 10, background: 'var(--primary-light)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14,
-              }}>
-                <Database size={22} color="var(--primary)" />
-              </div>
-              <h2 className="montserrat" style={{fontSize: 22, fontWeight: 700, marginBottom: 8, color: 'var(--text)'}}>About This Peptide</h2>
-              <p style={{fontSize: 13, color: 'var(--text-muted)', fontWeight: 500}}>
-                Detailed information about <strong style={{color: 'var(--text-secondary)'}}>{product.name}</strong>.
-              </p>
-            </div>
-            <div style={{fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.8}}>
-              <p style={{marginBottom: 16}}>
-                <strong>{product.name}</strong> is supplied as a lyophilised powder vial and is lab tested to verify identity and purity.
-                Every batch comes with a Certificate of Analysis (COA) so you can verify exactly what you're getting.
-              </p>
-              <p>
-                This product falls under the <strong>{product.category}</strong> category.
-                For detailed usage information, dosing protocols, and stacking recommendations, please consult with a qualified healthcare professional.
-                All products are for research and personal use only.
-              </p>
+        {/* Detailed Description */}
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+          style={{
+            marginTop: 56, padding: 32, background: '#FAFAF8',
+            borderRadius: 16, border: '1px solid var(--border-light)',
+          }}>
+          <h2 className="montserrat" style={{ fontSize: 22, fontWeight: 700, marginBottom: 16 }}>
+            About {product.name}
+          </h2>
+          <p style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.9, maxWidth: 800 }}>
+            {product.description}
+          </p>
+        </motion.div>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <div style={{ marginTop: 64 }}>
+            <h2 className="section-heading">Related Products</h2>
+            <p className="section-desc">More from {product.category}</p>
+            <div className="product-grid">
+              {relatedProducts.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
           </div>
-        </section>
+        )}
 
-        {/* Responsive override */}
-        <style>{`
-          @media (max-width: 768px) {
-            [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
-            [style*="grid-template-columns: 280px 1fr"] { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
+        {/* Back to Shop */}
+        <div style={{ textAlign: 'center', marginTop: 48 }}>
+          <Link to="/shop" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            fontSize: 14, fontWeight: 700, color: 'var(--primary)',
+          }}>
+            <ArrowLeft size={16} /> Back to All Products
+          </Link>
+        </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; gap: 32px !important; }
+        }
+      `}</style>
     </div>
   );
 };

@@ -71,7 +71,7 @@ const Blog = () => {
           </div>
           <h1 className="montserrat" style={{fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, color: 'var(--text)', marginBottom: 12}}>
             Science-Backed <span style={{
-              background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)',
+              background: 'var(--brand-gradient)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             }}>Peptide Research</span>
           </h1>

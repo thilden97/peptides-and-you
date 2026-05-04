@@ -1,106 +1,102 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Truck, Award, FlaskConical, FileCheck, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, ShieldCheck, FlaskConical, Award, Truck } from 'lucide-react';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { delay: i * 0.12, duration: 0.6, ease: 'easeOut' } }),
+};
 
 const Hero = () => {
   return (
     <section style={{
-      paddingTop: 200, paddingBottom: 80,
-      background: '#FFFFFF',
+      background: '#fff', paddingTop: 200, paddingBottom: 80,
       position: 'relative', overflow: 'hidden',
     }}>
-      {/* Hero background image */}
+      {/* Subtle gold gradient orb */}
       <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-        backgroundImage: 'url(/hero-bg.png)',
-        backgroundSize: 'cover', backgroundPosition: 'center',
-        opacity: 0.08, pointerEvents: 'none',
+        position: 'absolute', top: -200, right: -200,
+        width: 600, height: 600, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(184,134,11,0.06) 0%, transparent 70%)',
+        pointerEvents: 'none',
       }} />
-
-      {/* Subtle brand gradient accent */}
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 700, height: 700,
-        background: 'radial-gradient(circle, rgba(31,111,178,0.06) 0%, rgba(79,191,159,0.03) 40%, transparent 70%)',
+        position: 'absolute', bottom: -100, left: -100,
+        width: 400, height: 400, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(212,168,67,0.04) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
-      <div className="container" style={{position: 'relative', zIndex: 2}}>
-        <div style={{maxWidth: 700, margin: '0 auto', textAlign: 'center'}}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* Badge */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              padding: '6px 14px', borderRadius: 8,
-              background: 'var(--primary-light)', border: '1px solid rgba(31,111,178,0.15)',
-              marginBottom: 28, fontSize: 11, fontWeight: 700,
-              textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--primary)',
-            }}>
-              <FileCheck size={14} color="var(--primary)" />
-              Lab Tested · COA Included · All Products
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+          {/* Badge */}
+          <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+            <div className="coa-badge" style={{ margin: '0 auto 20px' }}>
+              <FlaskConical size={13} /> Pharmaceutical-Grade Peptides
             </div>
+          </motion.div>
 
-            {/* Heading */}
-            <h1 className="montserrat" style={{
-              fontSize: 'clamp(32px, 5.5vw, 60px)',
-              fontWeight: 700, lineHeight: 1.1,
-              marginBottom: 20, color: 'var(--text)',
-              letterSpacing: '0.01em',
+          {/* Headline */}
+          <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={1}
+            className="montserrat" style={{
+              fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 800,
+              lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: 20,
+              color: 'var(--text)',
             }}>
-              Premium{' '}
-              <span style={{
-                background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-              }}>Peptides & You</span>
-            </h1>
+            Science-Backed{' '}
+            <span style={{
+              background: 'var(--brand-gradient)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            }}>Peptides</span>
+            <br />for Optimal Health
+          </motion.h1>
 
-            {/* Subtitle */}
-            <p style={{
-              fontSize: 17, color: 'var(--text-secondary)',
-              maxWidth: 520, margin: '0 auto 36px', lineHeight: 1.7,
+          {/* Subheadline */}
+          <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={2}
+            style={{
+              fontSize: 'clamp(15px, 2vw, 18px)', color: 'var(--text-secondary)',
+              lineHeight: 1.7, marginBottom: 32, maxWidth: 560, margin: '0 auto 32px',
             }}>
-              Pharmaceutical-grade lyophilised peptides. Every product lab-tested with Certificate of Analysis included. Trusted by practitioners across Southeast Asia.
-            </p>
+            Lab-tested, COA-verified peptides for healing, weight management, anti-aging, and cognitive performance. Trusted by practitioners across the Philippines.
+          </motion.p>
 
-            {/* CTAs — with Quiz CTA */}
-            <div style={{display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48}}>
-              <Link to="/shop" className="btn-primary" style={{padding: '14px 32px', fontSize: 15}}>
-                Shop All Peptides <ArrowRight size={18} />
-              </Link>
-              <Link to="/quiz" className="btn-outline" style={{
-                padding: '14px 32px', fontSize: 15,
-                background: 'var(--accent-light)',
-                borderColor: 'var(--accent)',
-                color: 'var(--accent)',
+          {/* CTAs */}
+          <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={3}
+            style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
+            <Link to="/shop" className="btn-primary" style={{ padding: '15px 36px', fontSize: 15 }}>
+              Shop All Peptides <ArrowRight size={16} />
+            </Link>
+            <Link to="/quiz" className="btn-outline" style={{ padding: '15px 36px', fontSize: 15 }}>
+              Find Your Peptide
+            </Link>
+          </motion.div>
+
+          {/* Trust Row */}
+          <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={4}
+            style={{
+              display: 'flex', justifyContent: 'center', gap: 32, flexWrap: 'wrap',
+            }}>
+            {[
+              { icon: ShieldCheck, label: 'Lab Tested' },
+              { icon: FlaskConical, label: '≥98% Purity' },
+              { icon: Award, label: 'COA Every Batch' },
+              { icon: Truck, label: 'Fast PH Shipping' },
+            ].map((item, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                fontSize: 13, fontWeight: 600, color: 'var(--text-muted)',
               }}>
-                <Sparkles size={16} /> Find Your Peptide
-              </Link>
-            </div>
-
-            {/* Stats */}
-            <div style={{
-              display: 'flex', justifyContent: 'center', gap: 48, flexWrap: 'wrap',
-              paddingTop: 28, borderTop: '1px solid var(--border)',
-            }}>
-              {[
-                { value: '12', label: 'Products' },
-                { value: 'COA', label: 'Every Batch' },
-                { value: 'Lab', label: 'Tested & Verified' },
-              ].map((stat) => (
-                <div key={stat.label} style={{textAlign: 'center'}}>
-                  <div className="montserrat" style={{fontSize: 26, fontWeight: 700, color: 'var(--primary)'}}>{stat.value}</div>
-                  <div style={{fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginTop: 2}}>
-                    {stat.label}
-                  </div>
+                <div style={{
+                  width: 36, height: 36, borderRadius: 10,
+                  background: 'var(--primary-light)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <item.icon size={16} color="var(--primary)" />
                 </div>
-              ))}
-            </div>
+                {item.label}
+              </div>
+            ))}
           </motion.div>
         </div>
       </div>
