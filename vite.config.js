@@ -15,9 +15,9 @@ const cloudflareFunctionsMock = () => {
             try {
               const data = JSON.parse(body);
               
-              // Hardcoded purely for local mock during npm run dev. 
-              // In production, Cloudflare Pages uses env.GEMINI_API_KEY from the dashboard!
-              const API_KEY = "AIzaSyAE4DTAoE_6kNVKOOP9xzY82zALZT6QQlM"; 
+              // For local dev: set GEMINI_API_KEY in a .env file or environment variable
+              // In production: Cloudflare Pages uses env.GEMINI_API_KEY from the dashboard
+              const API_KEY = process.env.GEMINI_API_KEY || "YOUR_GEMINI_API_KEY_HERE"; 
 
               const geminiPayload = {
                 systemInstruction: {
