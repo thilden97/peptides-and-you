@@ -4,7 +4,7 @@ import ProductCard from '../components/ProductCard';
 import { peptides } from '../data/peptides';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { ArrowRight, FlaskConical, FileCheck, ShieldCheck, Sparkles, ChevronDown, HelpCircle, Truck, Brain, Dumbbell, Scale, Syringe, Award } from 'lucide-react';
+import { ArrowRight, FlaskConical, FileCheck, ShieldCheck, Sparkles, ChevronDown, HelpCircle, Truck, Brain, Dumbbell, Scale, Syringe, Award, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const fadeUp = {
@@ -28,7 +28,7 @@ const FAQItem = ({ question, answer, isOpen, onClick, index }) => (
       className="faq-item"
       style={{
         width: '100%', textAlign: 'left', background: isOpen ? 'var(--primary-light)' : '#fff',
-        border: isOpen ? '1.5px solid rgba(184,134,11,0.2)' : '1.5px solid var(--border-light)',
+        border: isOpen ? '1.5px solid rgba(31,111,178,0.2)' : '1.5px solid var(--border-light)',
         borderRadius: 12, padding: '18px 22px', cursor: 'pointer',
         transition: 'all 0.3s ease', marginBottom: 8,
       }}
@@ -67,6 +67,7 @@ const Home = () => {
     { icon: Sparkles, name: 'Anti-Aging & Skin', desc: 'GHK-Cu, Epithalon' },
     { icon: Brain, name: 'Cognitive Enhancement', desc: 'Semax, Selank' },
     { icon: Syringe, name: 'Growth Hormone', desc: 'CJC-1295, Ipamorelin' },
+    { icon: Package, name: 'Accessories', desc: 'BAC Water' },
   ];
 
   const faqs = [
@@ -222,7 +223,7 @@ const Home = () => {
             </h2>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 14 }}>
             {categories.map((cat, i) => (
               <motion.div key={cat.name} initial="hidden" whileInView="visible" viewport={{ once: true }}
                 variants={fadeUp} custom={i}>
@@ -394,13 +395,13 @@ const Home = () => {
         <div style={{
           position: 'absolute', top: '50%', right: '10%', transform: 'translateY(-50%)',
           width: 400, height: 400,
-          background: 'radial-gradient(circle, rgba(212,168,67,0.12), transparent 70%)',
+          background: 'radial-gradient(circle, rgba(79,191,159,0.12), transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{
           position: 'absolute', top: '30%', left: '5%',
           width: 300, height: 300,
-          background: 'radial-gradient(circle, rgba(184,134,11,0.1), transparent 70%)',
+          background: 'radial-gradient(circle, rgba(31,111,178,0.1), transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div className="container" style={{position: 'relative', zIndex: 2}}>
@@ -428,10 +429,10 @@ const Home = () => {
 
       <style>{`
         @media (max-width: 900px) {
-          [style*="grid-template-columns: repeat(5"] { grid-template-columns: repeat(3, 1fr) !important; }
+          [style*="grid-template-columns: repeat(6"] { grid-template-columns: repeat(3, 1fr) !important; }
         }
         @media (max-width: 560px) {
-          [style*="grid-template-columns: repeat(5"] { grid-template-columns: repeat(2, 1fr) !important; }
+          [style*="grid-template-columns: repeat(6"] { grid-template-columns: repeat(2, 1fr) !important; }
         }
       `}</style>
     </div>

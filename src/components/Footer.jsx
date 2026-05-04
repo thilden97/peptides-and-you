@@ -97,7 +97,7 @@ const Footer = () => {
             <div style={{
               display: 'flex', alignItems: 'center', gap: 6,
               padding: '8px 12px', borderRadius: 8,
-              background: 'rgba(184,134,11,0.1)', border: '1px solid rgba(184,134,11,0.15)',
+              background: 'rgba(31,111,178,0.1)', border: '1px solid rgba(31,111,178,0.15)',
             }}>
               <ShieldCheck size={13} color="var(--accent)" />
               <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)' }}>

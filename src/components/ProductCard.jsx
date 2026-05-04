@@ -52,8 +52,8 @@ const ProductCard = ({ product }) => {
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
           <div className="stars">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} size={12} fill={i < Math.floor(product.rating) ? '#B8860B' : 'none'}
-                color={i < Math.floor(product.rating) ? '#B8860B' : '#D4D4D8'} />
+              <Star key={i} size={12} fill={i < Math.floor(product.rating) ? '#1F6FB2' : 'none'}
+                color={i < Math.floor(product.rating) ? '#1F6FB2' : '#D4D4D8'} />
             ))}
           </div>
           <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)' }}>

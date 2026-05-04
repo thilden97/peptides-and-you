@@ -18,13 +18,13 @@ const Hero = () => {
       <div style={{
         position: 'absolute', top: -200, right: -200,
         width: 600, height: 600, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(184,134,11,0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(31,111,178,0.06) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
       <div style={{
         position: 'absolute', bottom: -100, left: -100,
         width: 400, height: 400, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(212,168,67,0.04) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(79,191,159,0.04) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 

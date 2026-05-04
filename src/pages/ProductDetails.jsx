@@ -171,7 +171,7 @@ const ProductDetails = () => {
                   position: 'absolute', top: 16, right: 16,
                   background: 'var(--primary-light)', padding: '5px 12px', borderRadius: 6,
                   fontSize: 12, fontWeight: 700, color: 'var(--primary)',
-                  border: '1px solid rgba(184,134,11,0.15)',
+                  border: '1px solid rgba(31,111,178,0.15)',
                 }}>
                   {currentVariant.label}
                 </div>

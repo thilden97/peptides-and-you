@@ -77,7 +77,7 @@ const ChatbotPlaceholder = () => {
           >
             {/* Header */}
             <div style={{
-              background: 'linear-gradient(135deg, #B8860B, #D4A843)', padding: '16px 18px',
+              background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)', padding: '16px 18px',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff',
             }}>
               <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
@@ -141,7 +141,7 @@ const ChatbotPlaceholder = () => {
                 type="submit"
                 disabled={!inputText.trim()}
                 style={{
-                  background: inputText.trim() ? 'linear-gradient(135deg, #B8860B, #D4A843)' : '#e2e8f0', 
+                  background: inputText.trim() ? 'linear-gradient(135deg, #1F6FB2, #4FBF9F)' : '#e2e8f0', 
                   width: 42, height: 42, borderRadius: 10,
                   color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   border: 'none', cursor: inputText.trim() ? 'pointer' : 'default',
@@ -158,8 +158,8 @@ const ChatbotPlaceholder = () => {
       <button onClick={() => setIsOpen(!isOpen)}
         style={{
           width: 56, height: 56, borderRadius: '50%',
-          background: 'linear-gradient(135deg, #B8860B, #D4A843)', color: '#fff',
-          boxShadow: '0 8px 24px rgba(184,134,11,0.3)',
+          background: 'linear-gradient(135deg, #1F6FB2, #4FBF9F)', color: '#fff',
+          boxShadow: '0 8px 24px rgba(31,111,178,0.3)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           border: '3px solid #fff', transition: 'transform 0.25s', cursor: 'pointer'
         }}
