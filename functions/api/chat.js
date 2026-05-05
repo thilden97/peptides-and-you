@@ -18,6 +18,17 @@ export async function onRequestPost({ request, env }) {
       });
     }
 
+    // Gemini API requires alternating messages starting with 'user'
+    const messages = body.messages.map(msg => ({
+      role: msg.sender === 'user' ? 'user' : 'model',
+      parts: [{ text: msg.text }]
+    }));
+
+    // If the first message is from the model/bot, remove it to comply with Gemini API requirements
+    if (messages.length > 0 && messages[0].role === 'model') {
+      messages.shift();
+    }
+
     // Construct the payload completely server-side to prevent prompt injection or abuse
     const geminiPayload = {
       systemInstruction: {
@@ -32,17 +43,14 @@ export async function onRequestPost({ request, env }) {
           - If you do not know an answer or it requires complex medical advice, recommend they consult a professional or reach out via our Contact page.` 
         }]
       },
-      contents: body.messages.map(msg => ({
-        role: msg.sender === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.text }]
-      })),
+      contents: messages,
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 600,
       }
     };
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${API_KEY}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(geminiPayload)

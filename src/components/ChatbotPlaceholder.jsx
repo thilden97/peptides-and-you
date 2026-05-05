@@ -41,9 +41,10 @@ const ChatbotPlaceholder = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Network response was not ok');
         }
-
+ 
         const data = await response.json();
         
         if (data.reply) {
@@ -52,10 +53,13 @@ const ChatbotPlaceholder = () => {
           setMessages(prev => [...prev, { text: "I'm having trouble thinking right now. Please try again later.", sender: 'bot' }]);
         }
         setIsTyping(false);
-
+ 
       } catch (error) {
         console.error("Error connecting to Chat API:", error);
-        setMessages(prev => [...prev, { text: "Connection error. Ensure the Gemini API key is configured in the Cloudflare dashboard.", sender: 'bot' }]);
+        const errorMsg = error.message.includes('API key') 
+          ? "API Key error. Please double-check your Cloudflare dashboard configuration."
+          : `Error: ${error.message}`;
+        setMessages(prev => [...prev, { text: errorMsg, sender: 'bot' }]);
         setIsTyping(false);
       }
   };
