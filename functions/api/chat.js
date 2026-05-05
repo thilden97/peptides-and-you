@@ -50,7 +50,7 @@ export async function onRequestPost({ request, env }) {
       }
     };
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(geminiPayload)
@@ -59,7 +59,18 @@ export async function onRequestPost({ request, env }) {
     if (!response.ok) {
        const errorText = await response.text();
        console.error("Gemini API Error:", errorText);
-       return new Response(JSON.stringify({ error: "Error communicating with Gemini AI." }), { 
+       
+       let parsedError = "Error communicating with Gemini AI.";
+       try {
+         const jsonError = JSON.parse(errorText);
+         if (jsonError.error && jsonError.error.message) {
+           parsedError = jsonError.error.message;
+         }
+       } catch (e) {
+         // keep default error
+       }
+
+       return new Response(JSON.stringify({ error: `Gemini API: ${parsedError}` }), { 
          status: 502,
          headers: { "Content-Type": "application/json" }
        });
