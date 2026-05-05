@@ -23,7 +23,7 @@ const Stars = ({ rating = 5 }) => (
 const formatPrice = (price) => `₱${price.toLocaleString()}`;
 
 // WhatsApp number placeholder — replace with client's number
-const WHATSAPP_NUMBER = '639XXXXXXXXX';
+const WHATSAPP_NUMBER = '639988437434';
 
 const ProductDetails = () => {
   const { id } = useParams();

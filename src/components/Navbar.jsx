@@ -25,7 +25,7 @@ const Navbar = () => {
   ];
 
   // WhatsApp placeholder — replace with client's number
-  const whatsappUrl = 'https://wa.me/639XXXXXXXXX?text=Hi!%20I%27d%20like%20to%20learn%20more%20about%20your%20peptides.';
+  const whatsappUrl = 'https://wa.me/639988437434?text=Hi!%20I%27d%20like%20to%20learn%20more%20about%20your%20peptides.';
 
   return (
     <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}>
