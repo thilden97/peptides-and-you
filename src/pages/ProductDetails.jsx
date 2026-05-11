@@ -44,9 +44,9 @@ const ProductDetails = () => {
   const reviewCount = Math.floor(product.rating * 14 + 23);
 
   const whatsappMessage = encodeURIComponent(
-    `Hi! I'd like to order ${product.name} (${currentVariant.label}) — ₱${currentVariant.price.toLocaleString()}.\n\nPlease let me know the next steps. Thank you!`
+    `Hi! I'd like to order ${product.name} (${currentVariant.label}) — ₱${currentVariant.price.toLocaleString()}.` + '\n\n' + 'Please let me know the next steps. Thank you!'
   );
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
+  const whatsappUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${whatsappMessage}`;
 
   // Product JSON-LD
   const productSchema = {

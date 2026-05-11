@@ -311,7 +311,7 @@ const Quiz = () => {
                         )}
                         <div style={{display: 'flex', gap: 20, alignItems: 'flex-start'}}>
                           <img
-                            src="/peptide-vial-branded.png"
+                            src={product.image}
                             alt={product.name}
                             style={{width: 90, height: 90, objectFit: 'contain', borderRadius: 10, background: 'var(--primary-light)', padding: 8}}
                           />

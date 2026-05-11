@@ -9,14 +9,16 @@ const ProductCard = ({ product }) => {
   return (
     <Link to={`/product/${product.id}`} className="product-card" style={{ display: 'flex', flexDirection: 'column' }}>
       {/* Image Section */}
-      <div className="product-card-image" style={{ background: '#FAFAF8' }}>
+      <div className="product-card-image" style={{ background: '#FAFAF8', overflow: 'hidden' }}>
         <div className="badge-top">{product.category}</div>
-        <img
-          src={product.image}
-          alt={product.name}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', padding: 16 }}
-          loading="lazy"
-        />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '220px', padding: '10px' }}>
+          <img
+            src={product.image}
+            alt={product.name}
+            loading="lazy"
+            style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }}
+          />
+        </div>
       </div>
 
       {/* Body */}
