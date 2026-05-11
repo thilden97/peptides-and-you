@@ -145,16 +145,19 @@ const ProductDetails = () => {
 
         <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'flex-start'}}>
           {/* Image */}
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{position: 'sticky', top: 200}}>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="product-image-sticky">
             <div style={{
-              background: '#FAFAF8', aspectRatio: '1', borderRadius: 16,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '1px solid var(--border)', position: 'relative',
-              overflow: 'hidden',
+              position: 'relative',
             }}>
-              <img src={product.image} alt={`${product.name} peptide vial — Peptides & You`} style={{
-                width: '75%', height: '75%', objectFit: 'contain',
-              }} />
+              <div style={{ position: 'relative', width: '100%', maxWidth: '380px', margin: '0 auto', display: 'flex', justifyContent: 'center' }}>
+                <img 
+                  key={`${product.id}-${selectedVariant}`}
+                  src={currentVariant.image || product.image} 
+                  alt={`${product.name} ${currentVariant.label}`} 
+                  style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain', mixBlendMode: 'multiply' }} 
+                />
+              </div>
 
               {/* Category badge */}
               <div style={{
@@ -162,6 +165,7 @@ const ProductDetails = () => {
                 background: 'var(--brand-gradient)', color: '#fff',
                 padding: '5px 12px', borderRadius: 8,
                 fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
+                zIndex: 10,
               }}>
                 {product.category}
               </div>
@@ -172,6 +176,7 @@ const ProductDetails = () => {
                   background: 'var(--primary-light)', padding: '5px 12px', borderRadius: 6,
                   fontSize: 12, fontWeight: 700, color: 'var(--primary)',
                   border: '1px solid rgba(31,111,178,0.15)',
+                  zIndex: 10,
                 }}>
                   {currentVariant.label}
                 </div>
@@ -182,6 +187,7 @@ const ProductDetails = () => {
                 background: '#fff', padding: '10px 14px', borderRadius: 10,
                 boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)',
                 display: 'flex', alignItems: 'center', gap: 10,
+                zIndex: 10,
               }}>
                 <div style={{width: 32, height: 32, borderRadius: 8, background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                   <ShieldCheck size={17} color="#16A34A" />
@@ -341,9 +347,16 @@ const ProductDetails = () => {
 
         {/* Responsive override */}
         <style>{`
+          .product-image-sticky {
+            position: sticky;
+            top: 200px;
+          }
           @media (max-width: 768px) {
             [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
             [style*="grid-template-columns: 280px 1fr"] { grid-template-columns: 1fr !important; }
+            .product-image-sticky {
+              position: static !important;
+            }
           }
         `}</style>
       </div>
