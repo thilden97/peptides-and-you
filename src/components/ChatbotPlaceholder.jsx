@@ -101,8 +101,7 @@ const ChatbotPlaceholder = () => {
                   <Sparkles size={20} />
                 </div>
                 <div>
-                  <div className="montserrat" style={{fontSize: 15, fontWeight: 700}}>Gemini AI Assistant</div>
-                  <div style={{fontSize: 10, opacity: 0.9, fontWeight: 600, letterSpacing: '0.06em'}}>POWERED BY GOOGLE REASONING</div>
+                  <div className="montserrat" style={{fontSize: 15, fontWeight: 700}}>P&Y Ai assistant</div>
                 </div>
               </div>
               <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
@@ -149,7 +148,7 @@ const ChatbotPlaceholder = () => {
                     padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-light)'
                   }}>
                     <Loader2 size={16} className="animate-spin" style={{ animation: 'spin 1.5s linear infinite' }} />
-                    <span style={{fontSize: 13}}>Gemini is thinking...</span>
+                    <span style={{fontSize: 13}}>Looking for the best recommendation...</span>
                   </div>
                 </div>
               )}
