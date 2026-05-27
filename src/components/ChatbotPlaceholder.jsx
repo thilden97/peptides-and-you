@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, CornerDownRight, Sparkles, Loader2 } from 'lucide-react';
 
 const ChatbotPlaceholder = () => {
+  const whatsappUrl = 'https://api.whatsapp.com/send?phone=639988437434&text=Hi!%20I%27d%20like%20to%20learn%20more%20about%20your%20peptides.';
   const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -104,9 +105,24 @@ const ChatbotPlaceholder = () => {
                   <div style={{fontSize: 10, opacity: 0.9, fontWeight: 600, letterSpacing: '0.06em'}}>POWERED BY GOOGLE REASONING</div>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} style={{background: 'none', color: 'rgba(255,255,255,0.8)', padding: 4, cursor: 'pointer', border: 'none'}}>
-                <X size={20} />
-              </button>
+              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
+                  style={{
+                    background: '#fff', color: '#1F6FB2', 
+                    padding: '6px 12px', fontSize: 11, fontWeight: 700,
+                    borderRadius: 8, display: 'inline-flex', alignItems: 'center', gap: 5,
+                    textDecoration: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+                >
+                  <MessageCircle size={13} /> Order Now
+                </a>
+                <button onClick={() => setIsOpen(false)} style={{background: 'none', color: 'rgba(255,255,255,0.8)', padding: 4, cursor: 'pointer', border: 'none', display: 'flex', alignItems: 'center'}}>
+                  <X size={20} />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
