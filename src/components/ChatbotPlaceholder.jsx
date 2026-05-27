@@ -101,7 +101,7 @@ const ChatbotPlaceholder = () => {
                   <Sparkles size={20} />
                 </div>
                 <div>
-                  <div className="montserrat" style={{fontSize: 15, fontWeight: 700}}>P&Y Ai assistant</div>
+                  <div className="montserrat" style={{fontSize: 15, fontWeight: 700}}>Peptides & You AI Assistant</div>
                 </div>
               </div>
               <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
