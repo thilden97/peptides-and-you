@@ -41,8 +41,19 @@ const ChatbotPlaceholder = () => {
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Network response was not ok');
+          let errorMessage = 'Network response was not ok';
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorMessage;
+          } catch (jsonErr) {
+            try {
+              const textError = await response.text();
+              errorMessage = textError.substring(0, 100) || errorMessage;
+            } catch (textErr) {
+              errorMessage = `Status ${response.status}: ${response.statusText}`;
+            }
+          }
+          throw new Error(errorMessage);
         }
  
         const data = await response.json();
