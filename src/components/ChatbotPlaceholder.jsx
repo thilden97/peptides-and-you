@@ -97,11 +97,13 @@ const ChatbotPlaceholder = () => {
               display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff',
             }}>
               <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-                <div style={{background: 'rgba(255,255,255,0.2)', padding: 7, borderRadius: 8}}>
-                  <Sparkles size={20} />
+                <div style={{background: 'rgba(255,255,255,0.25)', padding: '5px', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <img src="/logo.png" alt="Peptides & You Logo" style={{ height: 26, width: 26, objectFit: 'contain' }} />
                 </div>
                 <div>
-                  <div className="montserrat" style={{fontSize: 15, fontWeight: 700}}>Peptides & You AI Assistant</div>
+                  <div className="montserrat" style={{fontSize: 14, fontWeight: 700, lineHeight: 1.2}}>
+                    Peptides & You<br />AI Assistant
+                  </div>
                 </div>
               </div>
               <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
