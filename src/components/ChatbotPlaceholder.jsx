@@ -97,8 +97,8 @@ const ChatbotPlaceholder = () => {
               display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff',
             }}>
               <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-                <div style={{background: 'rgba(255,255,255,0.25)', padding: '5px', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <img src="/logo.png" alt="Peptides & You Logo" style={{ height: 26, width: 26, objectFit: 'contain' }} />
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <img src="/logo.png" alt="Peptides & You Logo" style={{ height: 32, width: 32, objectFit: 'contain' }} />
                 </div>
                 <div>
                   <div className="montserrat" style={{fontSize: 14, fontWeight: 700, lineHeight: 1.2}}>
