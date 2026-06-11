@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
 import ProductCard from '../components/ProductCard';
 import { peptides } from '../data/peptides';
+import { blogPosts } from '../data/blogPosts';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { ArrowRight, FlaskConical, FileCheck, ShieldCheck, Sparkles, ChevronDown, HelpCircle, Truck, Brain, Dumbbell, Scale, Syringe, Award, Package } from 'lucide-react';
+import { ArrowRight, FlaskConical, FileCheck, ShieldCheck, Sparkles, ChevronDown, HelpCircle, Truck, Brain, Dumbbell, Scale, Syringe, Award, Package, BookOpen, Clock, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const fadeUp = {
@@ -59,6 +60,7 @@ const FAQItem = ({ question, answer, isOpen, onClick, index }) => (
 const Home = () => {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const featuredProducts = peptides.slice(0, 6);
+  const recentPosts = [...blogPosts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
   const [openFAQ, setOpenFAQ] = useState(0);
 
   const categories = [
@@ -340,6 +342,74 @@ const Home = () => {
                 <p style={{fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7}}>
                   {f.desc}
                 </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Latest Articles & Research Section ===== */}
+      <section style={{ padding: '72px 0', background: '#FAFAF8', borderTop: '1px solid var(--border-light)', borderBottom: '1px solid var(--border-light)' }}>
+        <div className="container">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 16, marginBottom: 36 }}>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+              <div className="coa-badge" style={{ marginBottom: 12 }}>
+                <BookOpen size={13} /> Latest Research & Guides
+              </div>
+              <h2 className="montserrat" style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, margin: 0 }}>
+                Science-Backed <span style={{ background: 'var(--brand-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Peptide Education</span>
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 14, maxWidth: 500, lineHeight: 1.6, marginTop: 8, marginBottom: 0 }}>
+                Stay informed with our latest articles, protocols, and guides written by our research team.
+              </p>
+            </motion.div>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}>
+              <Link to="/blog" className="btn-outline btn-hover-lift" style={{ padding: '10px 22px', fontSize: 13 }}>
+                View All Articles <ArrowRight size={16} />
+              </Link>
+            </motion.div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+            {recentPosts.map((post, i) => (
+              <motion.div
+                key={post.id}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                custom={i}
+              >
+                <Link to={`/blog/${post.slug}`} className="blog-card-link" style={{ textDecoration: 'none', display: 'block' }}>
+                  <div className="blog-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#fff', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden', transition: 'all 0.3s' }}>
+                    <div style={{ position: 'relative', height: 160, background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+                      <img src={post.featuredImage} alt={post.title} style={{ height: '100%', objectFit: 'contain' }} />
+                      <span className="blog-category-badge" style={{ position: 'absolute', top: 12, left: 12, margin: 0 }}>{post.category}</span>
+                    </div>
+                    <div style={{ padding: 24, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, fontSize: 12, color: 'var(--text-light)' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <Clock size={12} /> {post.readTime}
+                        </span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <Calendar size={12} /> {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      </div>
+                      <h3 className="montserrat" style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)', lineHeight: 1.35, marginBottom: 10, marginTop: 0 }}>
+                        {post.title}
+                      </h3>
+                      <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 20, flexGrow: 1, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {post.excerpt}
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border-light)', paddingTop: 16, marginTop: 'auto' }}>
+                        <span style={{ fontSize: 12, color: 'var(--text-light)' }}>By {post.author.replace('Peptides & You ', '')}</span>
+                        <span className="blog-read-more" style={{ fontSize: 13, fontWeight: 700, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                          Read <ArrowRight size={14} />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </div>
